@@ -14,7 +14,11 @@ class RemoteFeedLoader {
     }
 }
 
-class HTTPClient {
+protocol HTTPClient {
+    func get(from url: URL)
+}
+
+class HTTPClientSpy: HTTPClient {
     var requestedURL: URL?
     
     func get(from url: URL) {
@@ -25,14 +29,14 @@ class HTTPClient {
 final class EssensialFeedTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromURL() throws {
-        let client = HTTPClient()
+        let client = HTTPClientSpy()
         _ = RemoteFeedLoader()
         
         XCTAssertNil(client.requestedURL)
     }
     
     func test_load_requestDataFromURL() {
-        let client = HTTPClient()
+        let client = HTTPClientSpy()
         let sut = RemoteFeedLoader()
         
         sut.load(client: client)
