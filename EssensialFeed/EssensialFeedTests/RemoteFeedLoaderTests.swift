@@ -9,11 +9,17 @@ import XCTest
 @testable import EssensialFeed
 
 class RemoteFeedLoader {
-    
+    func load(client: HTTPClient) {
+        client.get(from: URL(string: "https://a-url.com")!)
+    }
 }
 
 class HTTPClient {
     var requestedURL: URL?
+    
+    func get(from url: URL) {
+        requestedURL = url
+    }
 }
 
 final class EssensialFeedTests: XCTestCase {
@@ -23,5 +29,15 @@ final class EssensialFeedTests: XCTestCase {
         _ = RemoteFeedLoader()
         
         XCTAssertNil(client.requestedURL)
+    }
+    
+    func test_load_requestDataFromURL() {
+        let client = HTTPClient()
+        let sut = RemoteFeedLoader()
+        
+        sut.load(client: client)
+        
+        XCTAssertNotNil(client.requestedURL)
+
     }
 }
