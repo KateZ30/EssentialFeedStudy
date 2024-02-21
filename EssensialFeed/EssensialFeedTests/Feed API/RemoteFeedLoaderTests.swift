@@ -38,7 +38,7 @@ final class EssensialFeedTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
 
-        expect(sut, toCompleteWith: .failure(.connectivity)) {
+        expect(sut, toCompleteWith: failure(.connectivity)) {
             client.complete(with: NSError(domain: "Test", code: 0), at: 0)
         }
     }
@@ -48,7 +48,7 @@ final class EssensialFeedTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
 
         samples.enumerated().forEach { index, code in
-            expect(sut, toCompleteWith: .failure(.invalidData)) {
+            expect(sut, toCompleteWith: failure(.invalidData)) {
                 let json = makeItemsJson([])
                 client.complete(withStatusCode: 400, data: json, at: index)
             }
@@ -59,7 +59,7 @@ final class EssensialFeedTests: XCTestCase {
         let (sut, client) = makeSUT()
         let invalidJSON = Data("invalid json".utf8)
 
-        expect(sut, toCompleteWith: .failure(.invalidData)) {
+        expect(sut, toCompleteWith: failure(.invalidData)) {
             client.complete(withStatusCode: 200, data: invalidJSON, at: 0)
         }
     }
@@ -138,7 +138,7 @@ final class EssensialFeedTests: XCTestCase {
             switch (receivedResult, result) {
                 case let (.success(receivedItems), .success(expectedItems)):
                     XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
-                case let (.failure(receivedError), .failure(expectedError)):
+                case let (.failure(receivedError as RemoteFeedLoader.Error), .failure(expectedError as RemoteFeedLoader.Error)):
                     XCTAssertEqual(receivedError, expectedError, file: file, line: line)
                 default:
                     XCTFail("Expected result \(result) got \(receivedResult) instead", file: file, line: line)
@@ -149,6 +149,10 @@ final class EssensialFeedTests: XCTestCase {
         action()
 
         wait(for: [exp], timeout: 1.0)
+    }
+
+    private func failure(_ error: RemoteFeedLoader.Error) -> RemoteFeedLoader.Result {
+        .failure(error)
     }
 
     private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
