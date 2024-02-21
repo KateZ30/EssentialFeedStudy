@@ -1,0 +1,43 @@
+//
+//  FeedItemMapper.swift
+//  EssensialFeed
+//
+//  Created by Kate Zemskova on 2/20/24.
+//
+
+import Foundation
+
+class FeedItemsMapper {
+    struct Root: Decodable {
+        let items: [Item]
+    }
+
+    struct Item: Decodable {
+        public let id: UUID
+        public let description: String?
+        public let location: String?
+        public let image: URL
+
+        public init(id: UUID, description: String?, location: String?, image: URL) {
+            self.id = id
+            self.description = description
+            self.location = location
+            self.image = image
+        }
+
+        var feedItem: FeedItem {
+            FeedItem(id: id, description: description, location: location, imageURL: image)
+        }
+    }
+
+    private static var OK_200: Int { 200 }
+
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [FeedItem] {
+        guard response.statusCode == OK_200 else {
+            throw RemoteFeedLoader.Error.invalidData
+        }
+
+        let root = try JSONDecoder().decode(Root.self, from: data)
+        return root.items.map { $0.feedItem }
+    }
+}
