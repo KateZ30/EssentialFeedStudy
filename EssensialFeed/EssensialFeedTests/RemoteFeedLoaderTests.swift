@@ -49,7 +49,8 @@ final class EssensialFeedTests: XCTestCase {
 
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: .failure(.invalidData)) {
-                client.complete(withStatusCode: 400, at: index)
+                let json = makeItemsJson([])
+                client.complete(withStatusCode: 400, data: json, at: index)
             }
         }
     }
@@ -135,7 +136,7 @@ final class EssensialFeedTests: XCTestCase {
             messages[index].completion(.failure(error))
         }
 
-        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int) {
+        func complete(withStatusCode code: Int, data: Data, at index: Int) {
             let response = HTTPURLResponse(url: requestedURLs[index],
                                            statusCode: code,
                                            httpVersion: nil,
