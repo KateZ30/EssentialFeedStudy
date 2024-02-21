@@ -40,9 +40,8 @@ final class EssensialFeedTests: XCTestCase {
         
         var capturedErrors: [RemoteFeedLoader.Error] = []
         sut.load { capturedErrors.append($0) }
-        
-        let clientError = NSError(domain: "Test", code: 0)
-        client.completions[0](clientError)
+                
+        client.complete(with: NSError(domain: "Test", code: 0), at: 0)
         
         XCTAssertEqual(capturedErrors, [.connectivity])
     }
@@ -55,12 +54,17 @@ final class EssensialFeedTests: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
-        var requestedURLs: [URL] = []
-        var completions = [(Error) -> Void]()
-        
+        private var messages = [(url: URL, completion: (Error) -> Void)]()
+        var requestedURLs: [URL] {
+            messages.map { $0.url }
+        }
+
         func get(from url: URL, completion: @escaping (Error) -> Void = { _ in }) {
-            requestedURLs.append(url)
-            completions.append(completion)
+            messages.append((url, completion))
+        }
+        
+        func complete(with error: Error, at index: Int) {
+            messages[index].completion(error)
         }
     }
 }
