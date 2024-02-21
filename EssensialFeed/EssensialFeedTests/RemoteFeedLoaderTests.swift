@@ -38,7 +38,7 @@ final class EssensialFeedTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
 
-        expect(sut, toCompleteWithError: .connectivity) {
+        expect(sut, toCompleteWith: .failure(.connectivity)) {
             client.complete(with: NSError(domain: "Test", code: 0), at: 0)
         }
     }
@@ -48,7 +48,7 @@ final class EssensialFeedTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            expect(sut, toCompleteWithError: .invalidData) {
+            expect(sut, toCompleteWith: .failure(.invalidData)) {
                 client.complete(withStatusCode: 400, at: index)
             }
         }
@@ -58,7 +58,7 @@ final class EssensialFeedTests: XCTestCase {
         let (sut, client) = makeSUT()
         let invalidJSON = Data("invalid json".utf8)
 
-        expect(sut, toCompleteWithError: .invalidData) {
+        expect(sut, toCompleteWith: .failure(.invalidData)) {
             client.complete(withStatusCode: 200, data: invalidJSON, at: 0)
         }
     }
@@ -67,12 +67,10 @@ final class EssensialFeedTests: XCTestCase {
         let (sut, client) = makeSUT()
         let emptyListJSON = Data("{\"items\": []}".utf8)
 
-        var capturedResults: [RemoteFeedLoader.Result] = []
-        sut.load { capturedResults.append($0) }
+        expect(sut, toCompleteWith: .success([])) {
+            client.complete(withStatusCode: 200, data: emptyListJSON, at: 0)
+        }
 
-        client.complete(withStatusCode: 200, data: emptyListJSON, at: 0)
-
-        XCTAssertEqual(capturedResults, [.success([])])
     }
 
     // MARK: - Helpers
@@ -83,7 +81,7 @@ final class EssensialFeedTests: XCTestCase {
     }
 
     private func expect(_ sut: RemoteFeedLoader,
-                        toCompleteWithError error: RemoteFeedLoader.Error,
+                        toCompleteWith result: RemoteFeedLoader.Result,
                         when action: () -> Void,
                         file: StaticString = #filePath,
                         line: UInt = #line) {
@@ -92,7 +90,7 @@ final class EssensialFeedTests: XCTestCase {
 
         action()
 
-        XCTAssertEqual(capturedResults, [.failure(error)], file: file, line: line)
+        XCTAssertEqual(capturedResults, [result], file: file, line: line)
     }
 
     private class HTTPClientSpy: HTTPClient {
