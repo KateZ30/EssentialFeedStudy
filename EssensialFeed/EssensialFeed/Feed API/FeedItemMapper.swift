@@ -22,13 +22,6 @@ class FeedItemsMapper {
         public let location: String?
         public let image: URL
 
-        public init(id: UUID, description: String?, location: String?, image: URL) {
-            self.id = id
-            self.description = description
-            self.location = location
-            self.image = image
-        }
-
         var feedItem: FeedItem {
             FeedItem(id: id, description: description, location: location, imageURL: image)
         }
