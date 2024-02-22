@@ -15,10 +15,14 @@ class URLSessionHTTPClient {
         self.session = session
     }
 
+    struct UnexpectedValuesRepresentation: Error {}
+
     func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
         session.dataTask(with: url) { _, _, error in
             if let error {
                 completion(.failure(error))
+            } else {
+                completion(.failure(UnexpectedValuesRepresentation()))
             }
         }.resume()
     }
@@ -31,6 +35,23 @@ final class URLSessionHTTPClientTests: XCTestCase {
 
     override func tearDown() {
         URLProtocolStub.stopInterceptingRequests()
+    }
+
+    func test_getFromURL_performGETRequestWithURL() {
+        let url = anyURL()
+        let sut = makeSUT()
+
+        let exp = expectation(description: "Wait for request")
+
+        URLProtocolStub.observeRequests { request in
+            XCTAssertEqual(request.url, url)
+            XCTAssertEqual(request.httpMethod, "GET")
+            exp.fulfill()
+        }
+
+        sut.get(from: url) { _ in }
+
+        wait(for: [exp], timeout: 1)
     }
 
     func test_getFromURL_failsOnRequestError() {
@@ -55,22 +76,27 @@ final class URLSessionHTTPClientTests: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
 
-    func test_getFromURL_performGETRequestWithURL() {
+    func test_getFromURL_failsOnAllNilValues() {
         let url = anyURL()
         let sut = makeSUT()
+        let error = anyError()
+        URLProtocolStub.stub(url: url, data: nil, response: nil, error: nil)
 
-        let exp = expectation(description: "Wait for request")
+        let exp = expectation(description: "Wait for completion")
 
-        URLProtocolStub.observeRequests { request in
-            XCTAssertEqual(request.url, url)
-            XCTAssertEqual(request.httpMethod, "GET")
+        sut.get(from: url) { result in
+            switch result {
+            case .failure:
+                break
+            default:
+                XCTFail("Expected failure with error \(error), got \(result) instead")
+            }
             exp.fulfill()
         }
 
-        sut.get(from: url) { _ in }
-
         wait(for: [exp], timeout: 1)
     }
+
 
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
