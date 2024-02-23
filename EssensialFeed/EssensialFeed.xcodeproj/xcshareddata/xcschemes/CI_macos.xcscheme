@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:EssensialFeedTests/CI.xctestplan"
+            reference = "container:EssensialFeedAPIEndToEndTests/CI.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
