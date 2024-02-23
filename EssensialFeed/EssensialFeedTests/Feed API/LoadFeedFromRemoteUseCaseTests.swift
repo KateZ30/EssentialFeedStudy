@@ -8,7 +8,7 @@
 import XCTest
 import EssensialFeed
 
-final class EssensialFeedTests: XCTestCase {
+final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromURL() throws {
         let (_, client) = makeSUT()
