@@ -10,7 +10,7 @@ import EssensialFeed
 
 final class EssensialFeedAPIEndToEndTests: XCTestCase {
     func test_endToEndTestServerGETFeedResult_matchesFixedTestAccountData() {
-        var receivedResult = getFeedResult()
+        let receivedResult = getFeedResult()
 
         switch receivedResult {
         case let .success(feed):
@@ -34,7 +34,7 @@ final class EssensialFeedAPIEndToEndTests: XCTestCase {
     // MARK: - Helpers
     private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> LoadFeedResult? {
         let testServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
-        let client = URLSessionHTTPClient()
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let loader = RemoteFeedLoader(url: testServerURL, client: client)
 
         trackForMemoryLeaks(client, file: file, line: line)
