@@ -1,0 +1,33 @@
+{
+  "configurations" : [
+    {
+      "id" : "4106F417-546E-4C6A-B9A0-2E894B8AD253",
+      "name" : "CI",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:EssensialFeed.xcodeproj",
+        "identifier" : "D1957B0C2B87E8D40020F72A",
+        "name" : "EssensialFeedAPIEndToEndTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:EssensialFeed.xcodeproj",
+        "identifier" : "D1957ADE2B855D500020F72A",
+        "name" : "EssensialFeedTests"
+      }
+    }
+  ],
+  "version" : 1
+}
