@@ -1,6 +1,8 @@
 # EssentialFeedStudy
 Following lectures in iOS Lead Essentials course
 
+[![CI-macOS](https://github.com/KateZ30/EssentialFeedStudy/actions/workflows/CI_macos.yml/badge.svg)](https://github.com/KateZ30/EssentialFeedStudy/actions/workflows/CI_macos.yml)
+
 ## Image Feed Feature Specs
 
 ### Story: Customer requests to see their image feed
