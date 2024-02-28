@@ -131,8 +131,4 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let local = models.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
         return (models, local)
     }
-
-    private func anyURL() -> URL {
-        return URL(string: "https://a-given-url.com")!
-    }
 }
