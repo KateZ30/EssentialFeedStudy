@@ -29,6 +29,7 @@
 		D1E595AA2B8EEB90008D9A7B /* FeedStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E595A92B8EEB90008D9A7B /* FeedStoreSpy.swift */; };
 		D1E595AC2B8EED76008D9A7B /* XCTestCase+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E595AB2B8EED76008D9A7B /* XCTestCase+Helpers.swift */; };
 		D1E595AE2B902BC0008D9A7B /* ValidateFeedCacheUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E595AD2B902BC0008D9A7B /* ValidateFeedCacheUseCase.swift */; };
+		D1E595B02B902F24008D9A7B /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E595AF2B902F24008D9A7B /* Date+Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		D1E595A92B8EEB90008D9A7B /* FeedStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreSpy.swift; sourceTree = "<group>"; };
 		D1E595AB2B8EED76008D9A7B /* XCTestCase+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Helpers.swift"; sourceTree = "<group>"; };
 		D1E595AD2B902BC0008D9A7B /* ValidateFeedCacheUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateFeedCacheUseCase.swift; sourceTree = "<group>"; };
+		D1E595AF2B902F24008D9A7B /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +202,7 @@
 			children = (
 				D1957B022B86FA190020F72A /* XCTestCase+MemoryLeakTracking.swift */,
 				D1E595AB2B8EED76008D9A7B /* XCTestCase+Helpers.swift */,
+				D1E595AF2B902F24008D9A7B /* Date+Helpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1957AF52B8560780020F72A /* LoadFeedFromRemoteUseCaseTests.swift in Sources */,
+				D1E595B02B902F24008D9A7B /* Date+Helpers.swift in Sources */,
 				D1957B032B86FA190020F72A /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				D1E595AA2B8EEB90008D9A7B /* FeedStoreSpy.swift in Sources */,
 				D13985742B8D4CD000B4691D /* CacheFeedUseCaseTests.swift in Sources */,
