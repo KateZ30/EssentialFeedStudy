@@ -31,6 +31,7 @@
 		D1E595AE2B902BC0008D9A7B /* ValidateFeedCacheUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E595AD2B902BC0008D9A7B /* ValidateFeedCacheUseCase.swift */; };
 		D1E595B22B902FF8008D9A7B /* FeedCache+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E595B12B902FF8008D9A7B /* FeedCache+Helpers.swift */; };
 		D1E595B42B903704008D9A7B /* FeedCachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E595B32B903704008D9A7B /* FeedCachePolicy.swift */; };
+		D1E595B62B96C4AA008D9A7B /* CodableFeedStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E595B52B96C4AA008D9A7B /* CodableFeedStoreTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		D1E595AD2B902BC0008D9A7B /* ValidateFeedCacheUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateFeedCacheUseCase.swift; sourceTree = "<group>"; };
 		D1E595B12B902FF8008D9A7B /* FeedCache+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedCache+Helpers.swift"; sourceTree = "<group>"; };
 		D1E595B32B903704008D9A7B /* FeedCachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCachePolicy.swift; sourceTree = "<group>"; };
+		D1E595B52B96C4AA008D9A7B /* CodableFeedStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFeedStoreTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				D13985732B8D4CD000B4691D /* CacheFeedUseCaseTests.swift */,
 				D1E595A62B8EE999008D9A7B /* LoadFeedFromCacheUseCaseTests.swift */,
 				D1E595AD2B902BC0008D9A7B /* ValidateFeedCacheUseCase.swift */,
+				D1E595B52B96C4AA008D9A7B /* CodableFeedStoreTests.swift */,
 			);
 			path = "Feed Cache";
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1E595B62B96C4AA008D9A7B /* CodableFeedStoreTests.swift in Sources */,
 				D1957AF52B8560780020F72A /* LoadFeedFromRemoteUseCaseTests.swift in Sources */,
 				D1E595B22B902FF8008D9A7B /* FeedCache+Helpers.swift in Sources */,
 				D1957B032B86FA190020F72A /* XCTestCase+MemoryLeakTracking.swift in Sources */,
