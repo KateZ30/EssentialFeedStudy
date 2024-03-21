@@ -81,21 +81,8 @@ class CodableFeedStoreTests: XCTestCase {
 
     func test_retrieve_hasNoSideEffectsOnEmptyCache() {
         let sut = makeSUT()
-        let exp = expectation(description: "Wait for retrieval")
 
-        sut.retrieve { result in
-            sut.retrieve { result in
-                switch result {
-                case .empty:
-                    break
-                default:
-                    XCTFail("Expected empty result, got \(result) instead")
-                }
-                exp.fulfill()
-            }
-        }
-
-        wait(for: [exp], timeout: 1.0)
+        expect(sut, toRetrieveTwice: .empty)
     }
 
     func test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues() {
@@ -103,7 +90,7 @@ class CodableFeedStoreTests: XCTestCase {
         let feed = uniqueFeed().local
         let timestamp = Date()
 
-        let exp = expectation(description: "Wait for retrieval")
+        let exp = expectation(description: "Wait for insert")
         sut.insert(feed, timestamp: timestamp) { insertResult in
             XCTAssertNil(insertResult, "Expected feed to be inserted successfully")
             exp.fulfill()
@@ -116,30 +103,18 @@ class CodableFeedStoreTests: XCTestCase {
 
     func test_retrieve_hasNoSideEffectsOnNonEmptyCache() {
         let sut = makeSUT()
-        let exp = expectation(description: "Wait for retrieval")
         let feed = uniqueFeed().local
         let timestamp = Date()
 
+        let exp = expectation(description: "Wait for insert")
         sut.insert(feed, timestamp: timestamp) { insertResult in
             XCTAssertNil(insertResult, "Expected feed to be inserted successfully")
-
-            sut.retrieve { firstResult in
-                sut.retrieve { secondResult in
-                    switch (firstResult, secondResult) {
-                    case let (.found(firstFound, firstTimestamp), .found(secondFound, secondTimestamp)):
-                        XCTAssertEqual(firstFound, feed)
-                        XCTAssertEqual(firstTimestamp, timestamp)
-                        XCTAssertEqual(secondFound, feed)
-                        XCTAssertEqual(secondTimestamp, timestamp)
-                    default:
-                        XCTFail("Expected retriving twice to deliver same feed and timestamp, got \(firstResult) and \(secondResult) instead")
-                    }
-                    exp.fulfill()
-                }
-            }
+            exp.fulfill()
         }
 
         wait(for: [exp], timeout: 1.0)
+
+        expect(sut, toRetrieveTwice: .found(feed: feed, timestamp: timestamp))
     }
 
     // Mark: - Helpers
@@ -166,6 +141,11 @@ class CodableFeedStoreTests: XCTestCase {
         }
 
         wait(for: [exp], timeout: 1.0)
+    }
+
+    func expect(_ sut: CodableFeedStore, toRetrieveTwice expectedResult: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
+        expect(sut, toRetrieve: expectedResult, file: file, line: line)
+        expect(sut, toRetrieve: expectedResult, file: file, line: line)
     }
 
     private func testSpecificStoreURL() -> URL {
