@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D11666A12BAE2BE5005A4DB2 /* CodableFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11666A02BAE2BE5005A4DB2 /* CodableFeedStore.swift */; };
 		D13985742B8D4CD000B4691D /* CacheFeedUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13985732B8D4CD000B4691D /* CacheFeedUseCaseTests.swift */; };
 		D1957AE02B855D500020F72A /* EssensialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1957AD72B855D500020F72A /* EssensialFeed.framework */; };
 		D1957AF02B855E840020F72A /* FeedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1957AEF2B855E840020F72A /* FeedImage.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D11666A02BAE2BE5005A4DB2 /* CodableFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFeedStore.swift; sourceTree = "<group>"; };
 		D139856F2B885A6900B4691D /* EssensialFeedAPIEndToEndTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = EssensialFeedAPIEndToEndTests.xctestplan; sourceTree = "<group>"; };
 		D13985702B885AC800B4691D /* CI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI.xctestplan; sourceTree = "<group>"; };
 		D13985732B8D4CD000B4691D /* CacheFeedUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedUseCaseTests.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				D1E595A02B8D601E008D9A7B /* FeedStore.swift */,
 				D1E595A42B8EE68D008D9A7B /* LocalFeedImage.swift */,
 				D1E595B32B903704008D9A7B /* FeedCachePolicy.swift */,
+				D11666A02BAE2BE5005A4DB2 /* CodableFeedStore.swift */,
 			);
 			path = "Feed Cache";
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				D1E595A52B8EE68D008D9A7B /* LocalFeedImage.swift in Sources */,
 				D1E595A12B8D601E008D9A7B /* FeedStore.swift in Sources */,
 				D1E5959F2B8D6002008D9A7B /* LocalFeedLoader.swift in Sources */,
+				D11666A12BAE2BE5005A4DB2 /* CodableFeedStore.swift in Sources */,
 				D1957AFA2B85BBB10020F72A /* HTTPClient.swift in Sources */,
 				D1957AF02B855E840020F72A /* FeedImage.swift in Sources */,
 				D1957AFF2B86A4C70020F72A /* URLSessionHTTPClient.swift in Sources */,
