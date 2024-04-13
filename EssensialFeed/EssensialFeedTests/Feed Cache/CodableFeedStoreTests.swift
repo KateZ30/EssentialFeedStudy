@@ -8,38 +8,7 @@
 import XCTest
 import EssensialFeed
 
-protocol FeedStoreSpecs {
-    func test_retrive_deliversEmptyOnEmptyCache()
-    func test_retrieve_hasNoSideEffectsOnEmptyCache()
-    func test_retrieve_deliversFoundValuesOnNonEmptyCache()
-    func test_retrieve_hasNoSideEffectsOnNonEmptyCache()
-
-    func test_insert_deliversNoErrorOnEmptyCache()
-    func test_insert_overridesPreviouslyInsertedCacheValues()
-
-    func test_delete_deliverNoErrorOnEmptyCache()
-    func test_delete_hasNoSideEffectsOnEmptyCache()
-    func test_delete_deliversNoErrorOnNonEmptyCache()
-    func test_delete_emptiesPreviouslyInsertedCache()
-    func test_storeSideEffects_runSerially()
-}
-
-protocol FailableRetrieveFeedStoreSpecs: FeedStoreSpecs {
-    func test_retrieve_deliversFailureOnRetrivalError()
-    func test_retrieve_hasNoSideEffectsOnFailure()
-}
-
-protocol FailableInsertFeedStoreSpecs: FeedStoreSpecs {
-    func test_insert_deliversErrorOnInsertionError()
-    func test_insert_hasNoSideEffectsOnInsertionError()
-}
-
-protocol FailableDeleteFeedStoreSpecs: FeedStoreSpecs {
-    func test_delete_deliversErrorOnDeletionError()
-    func test_delete_hasNoSideEffectsOnDeletionError()
-}
-
-class CodableFeedStoreTests: XCTestCase {
+class CodableFeedStoreTests: XCTestCase, FailableFeedStore {
     override func setUp() {
         super.setUp()
         setupEmptyStoreState()
