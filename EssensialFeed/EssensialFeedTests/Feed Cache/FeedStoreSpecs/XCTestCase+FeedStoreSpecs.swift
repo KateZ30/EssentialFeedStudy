@@ -38,6 +38,13 @@ extension FeedStoreSpecs where Self: XCTestCase {
         XCTAssertNil(insertionError, "Expected to insert cache successfully", file: file, line: line)
     }
 
+    func assertThatInsertDeliversNoErrorOnNonEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+        insert((uniqueFeed().local, Date()), to: sut)
+
+        let insertionError = insert((uniqueFeed().local, Date()), to: sut)
+        XCTAssertNil(insertionError, "Expected to override cache successfully", file: file, line: line)
+    }
+
     func assertThatInsertOverridesPreviouslyInsertedCacheValues(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         insert((uniqueFeed().local, Date()), to: sut)
 
@@ -66,7 +73,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
         XCTAssertNil(deletionError, "Expected non-empty cache deletion to succeed", file: file, line: line)
     }
 
-    func assertThatDeleteEmptyPreviouslyInsertedCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+    func assertThatDeleteEmptiesPreviouslyInsertedCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         insert((uniqueFeed().local, Date()), to: sut)
 
         deleteCache(from: sut)
