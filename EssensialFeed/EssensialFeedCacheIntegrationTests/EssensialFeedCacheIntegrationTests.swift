@@ -31,12 +31,7 @@ final class EssensialFeedCacheIntegrationTests: XCTestCase {
         let sutToPerformLoad = makeSUT()
         let feed = uniqueFeed().models
 
-        let saveExp = expectation(description: "Wait for save completion")
-        sutToPerformSave.save(feed) { saveError in
-            XCTAssertNil(saveError, "Expected successful save result")
-            saveExp.fulfill()
-        }
-        wait(for: [saveExp], timeout: 1.0)
+        save(feed, with: sutToPerformSave)
 
         expect(sutToPerformLoad, toLoad: feed)
     }
@@ -48,19 +43,9 @@ final class EssensialFeedCacheIntegrationTests: XCTestCase {
         let firstFeed = uniqueFeed().models
         let lastFeed = uniqueFeed().models
 
-        let firstSaveExp = expectation(description: "Wait for first save completion")
-        sutToPerformFirstSave.save(firstFeed) { saveError in
-            XCTAssertNil(saveError, "Expected successful save result")
-            firstSaveExp.fulfill()
-        }
-        wait(for: [firstSaveExp], timeout: 1.0)
+        save(firstFeed, with: sutToPerformFirstSave)
 
-        let lastSaveExp = expectation(description: "Wait for second save completion")
-        sutToPerformLastSave.save(lastFeed) { saveError in
-            XCTAssertNil(saveError, "Expected successful save result")
-            lastSaveExp.fulfill()
-        }
-        wait(for: [lastSaveExp], timeout: 1.0)
+        save(lastFeed, with: sutToPerformLastSave)
 
         expect(sutToPerformLoad, toLoad: lastFeed)
     }
@@ -106,5 +91,14 @@ final class EssensialFeedCacheIntegrationTests: XCTestCase {
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
+    }
+
+    private func save(_ feed: [FeedImage], with sut: LocalFeedLoader, file: StaticString = #filePath, line: UInt = #line) {
+        let saveExp = expectation(description: "Wait for save completion")
+        sut.save(feed) { saveError in
+            XCTAssertNil(saveError, "Expected successful save result", file: file, line: line)
+            saveExp.fulfill()
+        }
+        wait(for: [saveExp], timeout: 1.0)
     }
 }
