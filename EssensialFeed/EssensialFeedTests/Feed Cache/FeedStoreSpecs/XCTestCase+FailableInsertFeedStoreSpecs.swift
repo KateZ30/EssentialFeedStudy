@@ -16,6 +16,6 @@ extension FailableInsertFeedStoreSpecs where Self: XCTestCase {
 
     func assertThatInsertHasNoSideEffectsOnInsertionError(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         insert((uniqueFeed().local, Date()), to: sut)
-        expect(sut, toRetrieve: .success(.empty), file: file, line: line)
+        expect(sut, toRetrieve: .success(nil), file: file, line: line)
     }
 }
