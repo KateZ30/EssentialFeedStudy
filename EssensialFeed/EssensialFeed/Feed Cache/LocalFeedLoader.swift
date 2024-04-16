@@ -21,21 +21,28 @@ extension LocalFeedLoader {
     public typealias SaveResult = Error?
 
     public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        store.deleteCachedFeed { [weak self] deleteError in
+        store.deleteCachedFeed { [weak self] deleteResult in
             guard let self else { return }
 
-            if let deleteError {
-                completion(deleteError)
-            } else {
+            switch deleteResult {
+            case .success:
                 self.cache(feed, with: completion)
+            case .failure(let error):
+                completion(error)
             }
         }
     }
 
     private func cache(_ feed: [FeedImage], with completion: @escaping (SaveResult) -> Void) {
-        store.insert(feed.toLocal(), timestamp: currentDate()) { [weak self] error in
+        store.insert(feed.toLocal(), timestamp: currentDate()) { [weak self] insertResult in
             guard self != nil else { return }
-            completion(error)
+
+            switch insertResult {
+                case .success:
+                    completion(nil)
+                case .failure(let error):
+                    completion(error)
+            }
         }
     }
 }
