@@ -117,7 +117,11 @@ class CodableFeedStoreTests: XCTestCase, FailableFeedStoreSpecs {
     }
 
     func test_delete_deliversErrorOnDeletionError() throws {
+        #if os(iOS)
+        let noDeletePermissionURL = systemCachesDirectory()
+        #else
         let noDeletePermissionURL = cachesDirectory()
+        #endif
         let sut = makeSUT(storeURL: noDeletePermissionURL)
 
         assertThatDeleteDeliversErrorOnDeletionError(on: sut)
@@ -153,6 +157,10 @@ class CodableFeedStoreTests: XCTestCase, FailableFeedStoreSpecs {
 
     private func deleteStoreArtifacts() {
         try? FileManager.default.removeItem(at: testSpecificStoreURL())
+    }
+
+    private func systemCachesDirectory() -> URL {
+        return FileManager.default.urls(for: .cachesDirectory, in: .systemDomainMask).first!
     }
 
     private func cachesDirectory() -> URL {
