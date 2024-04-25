@@ -23,13 +23,17 @@ class FeedViewController: UITableViewController {
 
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+    }
+
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
         load()
     }
 
     @objc private func load() {
+        refreshControl?.beginRefreshing()
         loader?.load { _ in }
     }
-
 }
 
 final class FeedViewControllerTests: XCTestCase {
@@ -42,19 +46,19 @@ final class FeedViewControllerTests: XCTestCase {
     func test_viewDidLoad_loadsFeed() {
         let (sut, loader) = makeSUT()
 
-        sut.loadViewIfNeeded()
+        sut.simulateAppearance()
 
         XCTAssertEqual(loader.loadCallCount, 1)
     }
 
     func test_pullToRefresh_loadsFeed() {
         let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
+        sut.simulateAppearance()
 
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedFeedReload()
         XCTAssertEqual(loader.loadCallCount, 2)
 
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedFeedReload()
         XCTAssertEqual(loader.loadCallCount, 3)
     }
 
@@ -74,16 +78,6 @@ final class FeedViewControllerTests: XCTestCase {
 
         func load(completion: @escaping (FeedLoader.Result) -> Void) {
             loadCallCount += 1
-        }
-    }
-}
-
-private extension UIRefreshControl {
-    func simulatePullToRefresh() {
-        allTargets.forEach { target in
-            actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
-                (target as NSObject).perform(Selector(action))
-            }
         }
     }
 }
