@@ -32,6 +32,8 @@
 		D15CFCDA2BD9ED6D00C2953B /* EssensialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1957AD72B855D500020F72A /* EssensialFeed.framework */; };
 		D15CFCDB2BD9ED6D00C2953B /* EssensialFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1957AD72B855D500020F72A /* EssensialFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D15CFCDF2BD9EE0E00C2953B /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1957B022B86FA190020F72A /* XCTestCase+MemoryLeakTracking.swift */; };
+		D15CFCE22BD9F37000C2953B /* FeedViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15CFCE12BD9F37000C2953B /* FeedViewController+TestHelpers.swift */; };
+		D15CFCE42BD9F3C100C2953B /* UIRefreshControl+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15CFCE32BD9F3C100C2953B /* UIRefreshControl+TestHelpers.swift */; };
 		D1957AE02B855D500020F72A /* EssensialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1957AD72B855D500020F72A /* EssensialFeed.framework */; };
 		D1957AF02B855E840020F72A /* FeedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1957AEF2B855E840020F72A /* FeedImage.swift */; };
 		D1957AF22B855F570020F72A /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1957AF12B855F570020F72A /* FeedLoader.swift */; };
@@ -133,6 +135,8 @@
 		D15923292BCA16E3004B164F /* EssensialFeedCacheIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssensialFeedCacheIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D159232B2BCA16E3004B164F /* EssensialFeedCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EssensialFeedCacheIntegrationTests.swift; sourceTree = "<group>"; };
 		D15CFCD62BD9EACD00C2953B /* FeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTests.swift; sourceTree = "<group>"; };
+		D15CFCE12BD9F37000C2953B /* FeedViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedViewController+TestHelpers.swift"; sourceTree = "<group>"; };
+		D15CFCE32BD9F3C100C2953B /* UIRefreshControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		D1957AD72B855D500020F72A /* EssensialFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EssensialFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1957ADF2B855D500020F72A /* EssensialFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssensialFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1957AEF2B855E840020F72A /* FeedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImage.swift; sourceTree = "<group>"; };
@@ -304,6 +308,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D15CFCE02BD9F35600C2953B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D15CFCE12BD9F37000C2953B /* FeedViewController+TestHelpers.swift */,
+				D15CFCE32BD9F3C100C2953B /* UIRefreshControl+TestHelpers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		D1957ACD2B855D500020F72A = {
 			isa = PBXGroup;
 			children = (
@@ -424,6 +437,7 @@
 		D1EC5DA92BD8481000ED8E1F /* EssensialFeediOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				D15CFCE02BD9F35600C2953B /* Helpers */,
 				D15CFCD62BD9EACD00C2953B /* FeedViewControllerTests.swift */,
 			);
 			path = EssensialFeediOSTests;
@@ -743,6 +757,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D15CFCD82BD9EACD00C2953B /* FeedViewControllerTests.swift in Sources */,
+				D15CFCE42BD9F3C100C2953B /* UIRefreshControl+TestHelpers.swift in Sources */,
+				D15CFCE22BD9F37000C2953B /* FeedViewController+TestHelpers.swift in Sources */,
 				D15CFCDF2BD9EE0E00C2953B /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
