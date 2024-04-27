@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import EssensialFeediOS
 
 extension FeedViewController {
     func simulateAppearance() {
@@ -40,6 +41,18 @@ extension FeedViewController {
         }
 
         refreshControl = spyRefreshControl
+    }
+
+    var numberOfRenderedFeedImageViews: Int {
+        return tableView.numberOfRows(inSection: feedImagesSection)
+    }
+
+    private var feedImagesSection: Int { 0 }
+
+    func feedImageView(at row: Int) -> UITableViewCell? {
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: feedImagesSection)
+        return ds?.tableView(tableView, cellForRowAt: index)
     }
 }
 
