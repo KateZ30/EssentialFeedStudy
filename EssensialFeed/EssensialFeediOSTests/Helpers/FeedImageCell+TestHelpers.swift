@@ -4,7 +4,7 @@
 //
 //  Created by Kate Zemskova on 4/26/24.
 //
-
+import UIKit
 import EssensialFeediOS
 
 extension FeedImageCell {
@@ -22,5 +22,9 @@ extension FeedImageCell {
 
     var isShowingImageLoadingIndicator: Bool {
         return feedImageContainer.isShimmering
+    }
+
+    var renderedImage: Data? {
+        return feedImageView.image?.pngData()
     }
 }
