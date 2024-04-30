@@ -27,4 +27,8 @@ extension FeedImageCell {
     var renderedImage: Data? {
         return feedImageView.image?.pngData()
     }
+
+    var isShowingRetryAction: Bool {
+        return !feedImageRetryButton.isHidden
+    }
 }
