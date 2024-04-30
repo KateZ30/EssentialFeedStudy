@@ -23,8 +23,22 @@ extension FeedViewController {
         refreshControl?.simulatePullToRefresh()
     }
 
+    func simulateFeedImageViewVisible(at index: Int) {
+        _ = feedImageView(at: index)
+    }
+
     var isShowingLoadingIndicator: Bool {
         return refreshControl?.isRefreshing == true
+    }
+
+    var numberOfRenderedFeedImageViews: Int {
+        return tableView.numberOfRows(inSection: feedImagesSection)
+    }
+
+    func feedImageView(at row: Int) -> UITableViewCell? {
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: feedImagesSection)
+        return ds?.tableView(tableView, cellForRowAt: index)
     }
 
     private func prepareForFirstAppearance() {
@@ -43,17 +57,8 @@ extension FeedViewController {
         refreshControl = spyRefreshControl
     }
 
-    var numberOfRenderedFeedImageViews: Int {
-        return tableView.numberOfRows(inSection: feedImagesSection)
-    }
 
     private var feedImagesSection: Int { 0 }
-
-    func feedImageView(at row: Int) -> UITableViewCell? {
-        let ds = tableView.dataSource
-        let index = IndexPath(row: row, section: feedImagesSection)
-        return ds?.tableView(tableView, cellForRowAt: index)
-    }
 }
 
 private class UIRefreshControlSpy: UIRefreshControl {
