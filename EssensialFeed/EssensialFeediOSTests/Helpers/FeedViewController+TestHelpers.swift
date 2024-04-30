@@ -23,8 +23,15 @@ extension FeedViewController {
         refreshControl?.simulatePullToRefresh()
     }
 
-    func simulateFeedImageViewVisible(at index: Int) {
-        _ = feedImageView(at: index)
+    @discardableResult
+    func simulateFeedImageViewVisible(at index: Int) -> FeedImageCell? {
+        return feedImageView(at: index) as? FeedImageCell
+    }
+
+    func simulateFeedImageViewNotVisible(at row: Int) {
+        let view = simulateFeedImageViewVisible(at: row)
+        let delegate = tableView.delegate
+        delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: IndexPath(row: row, section: feedImagesSection))
     }
 
     var isShowingLoadingIndicator: Bool {
