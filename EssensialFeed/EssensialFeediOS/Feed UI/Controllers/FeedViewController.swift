@@ -55,7 +55,6 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
 
     private func cellController(for indexPath: IndexPath) -> FeedImageCellController {
         return tableModel[indexPath.row]
-
     }
 
     private func cancelCellControllerload(for indexPath: IndexPath) {
