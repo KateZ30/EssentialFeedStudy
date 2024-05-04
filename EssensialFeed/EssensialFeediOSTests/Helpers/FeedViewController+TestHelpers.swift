@@ -76,9 +76,7 @@ extension FeedViewController {
         }
 
         refreshControl = spyRefreshControl
-        refreshController?.view = spyRefreshControl
     }
-
 
     private var feedImagesSection: Int { 0 }
 }
