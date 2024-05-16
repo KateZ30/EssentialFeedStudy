@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import EssensialFeed
 
 protocol FeedViewControllerDelegate {
     func didRequestFeedRefresh()
 }
 
-final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView {
+final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView , FeedErrorView {
     var delegate: FeedViewControllerDelegate?
 
     var tableModel: [FeedImageCellController] = [] {
@@ -19,6 +20,8 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
             tableView.reloadData()
         }
     }
+
+    @IBOutlet public private(set) weak var errorView: ErrorView!
 
     public override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
@@ -29,13 +32,6 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
         delegate?.didRequestFeedRefresh()
     }
 
-    func display(_ viewModel: FeedLoadingViewModel) {
-        if viewModel.isLoading {
-            refreshControl?.beginRefreshing()
-        } else {
-            refreshControl?.endRefreshing()
-        }
-    }
 
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableModel.count
@@ -65,5 +61,22 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
 
     private func cancelCellControllerLoad(for indexPath: IndexPath) {
         tableModel[indexPath.row].cancelLoad()
+    }
+
+    // MARK: - FeedErrorView
+    public func display(_ viewModel: FeedErrorViewModel) {
+        errorView.message = viewModel.message
+    }
+
+    func hideError() {
+        errorView.message = nil
+    }
+
+    public func display(_ viewModel: FeedLoadingViewModel) {
+        if viewModel.isLoading {
+            refreshControl?.beginRefreshing()
+        } else {
+            refreshControl?.endRefreshing()
+        }
     }
 }
