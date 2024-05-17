@@ -50,7 +50,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: failure(.invalidData)) {
                 let json = makeItemsJson([])
-                client.complete(withStatusCode: 400, data: json, at: index)
+                client.complete(withStatusCode: code, data: json, at: index)
             }
         }
     }
