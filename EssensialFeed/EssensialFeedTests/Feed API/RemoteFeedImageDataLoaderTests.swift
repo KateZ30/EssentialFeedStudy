@@ -8,7 +8,7 @@
 import XCTest
 import EssensialFeed
 
-final class RemoteFeedImageDataLoader {
+final class RemoteFeedImageDataLoader: FeedImageDataLoader {
     private let client: HTTPClient
 
     init(client: HTTPClient) {
@@ -19,8 +19,17 @@ final class RemoteFeedImageDataLoader {
         case invalidData
     }
 
-    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) {
-        client.get(from: url) { [weak self] result in
+    private struct HTTPTaskWrapper: FeedImageDataLoaderTask {
+        let wrapped: HTTPClientTask
+
+        func cancel() {
+            wrapped.cancel()
+        }
+    }
+
+    @discardableResult
+    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
+        let task = client.get(from: url) { [weak self] result in
             guard self != nil else { return }
 
             switch result {
@@ -34,6 +43,7 @@ final class RemoteFeedImageDataLoader {
                 }
             }
         }
+        return HTTPTaskWrapper(wrapped: task)
     }
 }
 
