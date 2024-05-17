@@ -4,7 +4,8 @@
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D1957AD62B855D500020F72A"
-               BuildableName = "EssensialFeed.framework"
-               BlueprintName = "EssensialFeed"
+               BlueprintIdentifier = "D1EC5D9D2BD8481000ED8E1F"
+               BuildableName = "EssensialFeediOS.framework"
+               BlueprintName = "EssensialFeediOS"
                ReferencedContainer = "container:EssensialFeed.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:EssensialFeedTests/EssensialFeed.xctestplan"
+            reference = "container:EssensialFeediOSTests/EssensialFeediOS.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -39,9 +40,9 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D1957ADE2B855D500020F72A"
-               BuildableName = "EssensialFeedTests.xctest"
-               BlueprintName = "EssensialFeedTests"
+               BlueprintIdentifier = "D1EC5DA42BD8481000ED8E1F"
+               BuildableName = "EssensialFeediOSTests.xctest"
+               BlueprintName = "EssensialFeediOSTests"
                ReferencedContainer = "container:EssensialFeed.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -67,9 +68,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D1957AD62B855D500020F72A"
-            BuildableName = "EssensialFeed.framework"
-            BlueprintName = "EssensialFeed"
+            BlueprintIdentifier = "D1EC5D9D2BD8481000ED8E1F"
+            BuildableName = "EssensialFeediOS.framework"
+            BlueprintName = "EssensialFeediOS"
             ReferencedContainer = "container:EssensialFeed.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
