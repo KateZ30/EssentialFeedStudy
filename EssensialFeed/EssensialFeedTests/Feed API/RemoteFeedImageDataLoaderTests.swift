@@ -8,45 +8,6 @@
 import XCTest
 import EssensialFeed
 
-final class RemoteFeedImageDataLoader: FeedImageDataLoader {
-    private let client: HTTPClient
-
-    init(client: HTTPClient) {
-        self.client = client
-    }
-
-    public enum Error: Swift.Error {
-        case invalidData
-    }
-
-    private struct HTTPTaskWrapper: FeedImageDataLoaderTask {
-        let wrapped: HTTPClientTask
-
-        func cancel() {
-            wrapped.cancel()
-        }
-    }
-
-    @discardableResult
-    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
-        let task = client.get(from: url) { [weak self] result in
-            guard self != nil else { return }
-
-            switch result {
-            case let .failure(error):
-                completion(.failure(error))
-            case let .success((data, response)):
-                if response.statusCode == 200, !data.isEmpty {
-                    completion(.success(data))
-                } else {
-                    completion(.failure(Error.invalidData))
-                }
-            }
-        }
-        return HTTPTaskWrapper(wrapped: task)
-    }
-}
-
 final class RemoteFeedImageDataLoaderTests: XCTestCase {
 
     func test_init_doesNotPerformAnyURLRequest() {
