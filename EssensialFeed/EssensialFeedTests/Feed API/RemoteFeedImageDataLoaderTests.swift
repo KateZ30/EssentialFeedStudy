@@ -37,7 +37,6 @@ final class LoadFeedImageDataFromRemoteUseCaseTests: XCTestCase {
 
     func test_deliversConnectivityErrorOnClientError() {
         let (sut, client) = makeSUT()
-        let clientError = anyNSError()
 
         expect(sut, toCompleteWith: failure(.connectivity)) {
             client.complete(with: anyNSError())
