@@ -6,12 +6,25 @@
 //
 
 import XCTest
+import EssensialFeed
 
-class LocalFeedImageDataLoader {
-    private var store: Any
+protocol FeedImageDataStore {
+    func retrieve(dataForURL url: URL)
+}
 
-    init(store: Any) {
+class LocalFeedImageDataLoader: FeedImageDataLoader {
+    private struct Task: FeedImageDataLoaderTask {
+        func cancel() {}
+    }
+    private var store: FeedImageDataStore
+
+    init(store: FeedImageDataStore) {
         self.store = store
+    }
+
+    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
+        store.retrieve(dataForURL: url)
+        return Task()
     }
 
 }
@@ -23,16 +36,32 @@ final class LocalFeedImageDataLoaderTests: XCTestCase {
         XCTAssertTrue(store.receivedMessages.isEmpty)
     }
 
+    func test_loadImageData_requestsStoreRetrieval() {
+        let (store, sut) = makeSUT()
+        let url = anyURL()
+
+        _ = sut.loadImageData(from: url) { _ in }
+
+        XCTAssertEqual(store.receivedMessages, [.retrieve(from: url)])
+    }
+
     // MARK: - Helpers
-    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (store: FeedStoreSpy, sut: LocalFeedImageDataLoader) {
-        let store = FeedStoreSpy()
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (store: StoreSpy, sut: LocalFeedImageDataLoader) {
+        let store = StoreSpy()
         let sut = LocalFeedImageDataLoader(store: store)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (store, sut)
     }
 
-    private class FeedStoreSpy {
-        private(set) var receivedMessages = [Any]()
+    private class StoreSpy: FeedImageDataStore {
+        enum Message: Equatable {
+            case retrieve(from: URL)
+        }
+        private(set) var receivedMessages = [Message]()
+
+        func retrieve(dataForURL url: URL) {
+            receivedMessages.append(.retrieve(from: url))
+        }
     }
 }
