@@ -21,6 +21,7 @@ class LocalFeedImageDataLoader: FeedImageDataLoader {
     private var store: FeedImageDataStore
 
     enum Error: Swift.Error {
+        case notFound
         case failed
     }
 
@@ -30,7 +31,10 @@ class LocalFeedImageDataLoader: FeedImageDataLoader {
 
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
         store.retrieve(dataForURL: url) { result in
-            completion(.failure(Error.failed))
+            completion(result
+                .mapError { _ in Error.failed }
+                .flatMap { _ in .failure(Error.notFound) }
+            )
         }
         return Task()
     }
@@ -52,11 +56,19 @@ final class LocalFeedImageDataLoaderTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve(from: url)])
     }
 
-    func test_failOnStoreError() {
+    func test_loadImageData_failsOnStoreError() {
         let (store, sut) = makeSUT()
 
         expect(sut, toCompleteWith: failed()) {
             store.complete(with: anyNSError())
+        }
+    }
+
+    func test_loadImageData_deliversNotFoundErrorOnNotFound() {
+        let (store, sut) = makeSUT()
+
+        expect(sut, toCompleteWith: notFound()) {
+            store.complete(with: .none)
         }
     }
 
@@ -72,6 +84,11 @@ final class LocalFeedImageDataLoaderTests: XCTestCase {
     private func failed() -> FeedImageDataLoader.Result {
         return .failure(LocalFeedImageDataLoader.Error.failed)
     }
+
+    private func notFound() -> FeedImageDataLoader.Result {
+        return .failure(LocalFeedImageDataLoader.Error.notFound)
+    }
+
 
     private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
@@ -107,6 +124,10 @@ final class LocalFeedImageDataLoaderTests: XCTestCase {
 
         func complete(with error: Error, at index: Int = 0) {
             completions[index](.failure(error))
+        }
+
+        func complete(with data: Data?, at index: Int = 0) {
+            completions[index](.success(data))
         }
     }
 }
