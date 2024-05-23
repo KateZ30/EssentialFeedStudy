@@ -40,8 +40,11 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader {
     }
 
     public typealias SaveResult = Swift.Result<Void, Error>
+
     public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
-        store.insert(data, for: url) { _ in }
+        store.insert(data, for: url) { result in
+            completion(.failure(.failed))
+        }
     }
 
     public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
