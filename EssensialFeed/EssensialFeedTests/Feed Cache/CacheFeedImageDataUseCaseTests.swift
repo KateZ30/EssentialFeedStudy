@@ -33,6 +33,14 @@ class CacheFeedimageDataUseCaseTests: XCTestCase {
         }
     }
 
+    func test_saveImageData_succeedsOnStoreInsertionSuccess() {
+        let (sut, store) = makeSUT()
+
+        expect(sut, toCompleteWith: .success(())) {
+            store.completeInsertionSuccessfully()
+        }
+    }
+
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: FeedImageDataStoreSpy) {
         let store = FeedImageDataStoreSpy()

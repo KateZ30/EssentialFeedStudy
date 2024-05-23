@@ -43,7 +43,7 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader {
 
     public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
         store.insert(data, for: url) { result in
-            completion(.failure(.failed))
+            completion(result.mapError { _ in Error.failed })
         }
     }
 
