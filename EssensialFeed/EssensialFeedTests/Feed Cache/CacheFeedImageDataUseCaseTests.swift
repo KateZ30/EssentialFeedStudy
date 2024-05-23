@@ -9,6 +9,22 @@ import XCTest
 import EssensialFeed
 
 class CacheFeedimageDataUseCaseTests: XCTestCase {
+    func test_init_doesNotMessageStoreUponCreation() {
+        let (_, store) = makeSUT()
+
+        XCTAssertTrue(store.receivedMessages.isEmpty)
+    }
+
+    func test_saveImageData_requestsStoreInsertionWithExpectedData() {
+        let (sut, store) = makeSUT()
+        let data = anyData()
+        let url = anyURL()
+
+        sut.save(data, for: url) { _ in }
+
+        XCTAssertEqual(store.receivedMessages, [.insert(data: data, for: url)])
+    }
+
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: FeedImageDataStoreSpy) {
         let store = FeedImageDataStoreSpy()
