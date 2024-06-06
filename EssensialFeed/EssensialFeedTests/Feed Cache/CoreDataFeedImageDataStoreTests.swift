@@ -27,7 +27,7 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
 
     func test_retriveImageData_deliversFoundDataOnURLMatch() throws {
         let sut = try makeSUT()
-        let url = URL(string: "http://a-url.com")!
+        let url = anyURL()
         let data = anyData()
 
         insert(data, for: url, into: sut)
@@ -37,7 +37,7 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
 
     func test_retrieveImageData_deliversLastInsertedDataOnMultipleInsertions() throws {
         let sut = try makeSUT()
-        let url = URL(string: "http://a-url.com")!
+        let url = anyURL()
         let firstData = Data("first".utf8)
         let lastData = Data("last".utf8)
 
@@ -45,6 +45,28 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         insert(lastData, for: url, into: sut)
 
         expect(sut, toCompleteWith: found(lastData), for: url)
+    }
+
+    func test_sideEffects_runSerially() throws {
+        let sut = try makeSUT()
+        let url = anyURL()
+
+        let op1 = expectation(description: "Wait for 1st operation")
+        sut.insert([localImage(url: url)], timestamp: Date()) { _ in
+            op1.fulfill()
+        }
+
+        let op2 = expectation(description: "Wait for 3nd operation")
+        sut.insert(anyData(), for: url) { _ in
+            op2.fulfill()
+        }
+
+        let op3 = expectation(description: "Wait for 3rd operation")
+        sut.insert(anyData(), for: url) { _ in
+            op3.fulfill()
+        }
+
+        wait(for: [op1, op2, op3], timeout: 5.0, enforceOrder: true)
     }
 
     // MARK: - Helpers
@@ -78,14 +100,15 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
             switch result {
                 case let .failure(error):
                     XCTFail("Expected image to be inserted successfully, got error: \(error)", file: file, line: line)
+                exp.fulfill()
                 case .success:
                 store.insert(data, for: url) { insertionResult in
                     if case let .failure(error) = insertionResult {
                         XCTFail("Expected to insert data successfully, got error: \(error)", file: file, line: line)
                     }
+                    exp.fulfill()
                 }
             }
-            exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
     }
