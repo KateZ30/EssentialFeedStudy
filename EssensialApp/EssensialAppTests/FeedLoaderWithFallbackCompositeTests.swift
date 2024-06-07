@@ -18,7 +18,14 @@ class FeedLoaderWithFallbackComposite: FeedLoader {
     }
 
     func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        primary.load(completion: completion)
+        primary.load { [weak self] result in
+            switch result {
+            case .success:
+                completion(result)
+            case .failure:
+                self?.fallback.load(completion: completion)
+            }
+        }
     }
 }
 
@@ -34,6 +41,25 @@ final class FeedLoaderWithFallbackCompositeTests: XCTestCase {
             switch result {
             case let .success(receivedFeed):
                 XCTAssertEqual(receivedFeed, primaryFeed)
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    func test_load_deliversFallbackFeedOnPrimaryLoaderFailure() {
+        let fallbackFeed = uniqueFeed()
+        let sut = makeSUT(primaryResult: .failure(anyNSError()),
+                          fallbackResult: .success(fallbackFeed))
+
+        let exp = expectation(description: "Wait for load completion")
+        sut.load { result in
+            switch result {
+            case let .success(receivedFeed):
+                XCTAssertEqual(receivedFeed, fallbackFeed)
             default:
                 XCTFail("Expected success, got \(result) instead")
             }
