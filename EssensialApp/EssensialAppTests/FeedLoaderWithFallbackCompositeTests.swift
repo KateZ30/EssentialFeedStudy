@@ -26,9 +26,8 @@ final class FeedLoaderWithFallbackCompositeTests: XCTestCase {
     func test_load_deliversPrimaryFeedOnPrimaryLoaderSuccess() {
         let primaryFeed = uniqueFeed()
         let fallbackFeed = uniqueFeed()
-        let remoteLoader = LoaderStub(result: .success(primaryFeed))
-        let localLoader = LoaderStub(result: .success(fallbackFeed))
-        let sut = FeedLoaderWithFallbackComposite(primary: remoteLoader, fallback: localLoader)
+        let sut = makeSUT(primaryResult: .success(primaryFeed),
+                          fallbackResult: .success(fallbackFeed))
 
         let exp = expectation(description: "Wait for load completion")
         sut.load { result in
@@ -57,13 +56,19 @@ final class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         }
     }
 
-    func uniqueFeed() -> [FeedImage] {
+    private func makeSUT(primaryResult: FeedLoader.Result, fallbackResult: FeedLoader.Result,
+                         file: StaticString = #filePath, line: UInt = #line) -> FeedLoaderWithFallbackComposite {
+        let primaryLoader = LoaderStub(result: primaryResult)
+        let fallbackLoader = LoaderStub(result: fallbackResult)
+        let sut = FeedLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
+        trackForMemoryLeaks(primaryLoader, file: file, line: line)
+        trackForMemoryLeaks(fallbackLoader, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
+    }
+
+    private func uniqueFeed() -> [FeedImage] {
         [FeedImage(id: UUID(), description: "any", location: "any", url: anyURL())]
     }
-
-    func anyURL() -> URL {
-        URL(string: "https://any-url.com")!
-    }
-
 
 }
