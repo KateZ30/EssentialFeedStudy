@@ -22,6 +22,7 @@
 		D12953E82C12B781003F1769 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12953E62C12B781003F1769 /* XCTestCase+MemoryLeakTracking.swift */; };
 		D12953EA2C12BA2E003F1769 /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12953E92C12BA2E003F1769 /* FeedLoaderWithFallbackComposite.swift */; };
 		D12953EC2C17BBF3003F1769 /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12953EB2C17BBF3003F1769 /* FeedImageDataLoaderWithFallbackCompositeTests.swift */; };
+		D12953EE2C17CD32003F1769 /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12953ED2C17CD32003F1769 /* FeedImageDataLoaderWithFallbackComposite.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		D12953E62C12B781003F1769 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "XCTestCase+MemoryLeakTracking.swift"; path = "../../EssensialFeed/EssensialFeedTests/Helpers/XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		D12953E92C12BA2E003F1769 /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		D12953EB2C17BBF3003F1769 /* FeedImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
+		D12953ED2C17CD32003F1769 /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				D129538B2C12AE6F003F1769 /* LaunchScreen.storyboard */,
 				D129538E2C12AE6F003F1769 /* Info.plist */,
 				D12953E92C12BA2E003F1769 /* FeedLoaderWithFallbackComposite.swift */,
+				D12953ED2C17CD32003F1769 /* FeedImageDataLoaderWithFallbackComposite.swift */,
 			);
 			path = EssensialApp;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 				D12953812C12AE6E003F1769 /* AppDelegate.swift in Sources */,
 				D12953EA2C12BA2E003F1769 /* FeedLoaderWithFallbackComposite.swift in Sources */,
 				D12953832C12AE6E003F1769 /* SceneDelegate.swift in Sources */,
+				D12953EE2C17CD32003F1769 /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
