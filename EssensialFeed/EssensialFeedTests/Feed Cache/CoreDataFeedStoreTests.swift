@@ -79,7 +79,7 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     func test_delete_removesAllObjects() throws {
         let store = try makeSUT()
 
-        insert((uniqueFeed().local, Date()), to: store)
+        insert((uniqueImageFeed().local, Date()), to: store)
 
         deleteCache(from: store)
 

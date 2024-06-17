@@ -10,12 +10,12 @@ import EssensialFeed
 
 extension FailableInsertFeedStoreSpecs where Self: XCTestCase {
     func assertThatInsertDeliversErrorOnInsertionError(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
-        let insertionError = insert((uniqueFeed().local, Date()), to: sut)
+        let insertionError = insert((uniqueImageFeed().local, Date()), to: sut)
         XCTAssertNotNil(insertionError, "Expected cache insertion to fail", file: file, line: line)
     }
 
     func assertThatInsertHasNoSideEffectsOnInsertionError(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
-        insert((uniqueFeed().local, Date()), to: sut)
+        insert((uniqueImageFeed().local, Date()), to: sut)
         expect(sut, toRetrieve: .success(nil), file: file, line: line)
     }
 }
