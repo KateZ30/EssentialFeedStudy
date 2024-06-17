@@ -4,7 +4,8 @@
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,24 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D1957AD62B855D500020F72A"
-               BuildableName = "EssensialFeed.framework"
-               BlueprintName = "EssensialFeed"
-               ReferencedContainer = "container:EssensialFeed.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D1EC5D9D2BD8481000ED8E1F"
-               BuildableName = "EssensialFeediOS.framework"
-               BlueprintName = "EssensialFeediOS"
-               ReferencedContainer = "container:EssensialFeed.xcodeproj">
+               BlueprintIdentifier = "D129537C2C12AE6E003F1769"
+               BuildableName = "EssensialApp.app"
+               BlueprintName = "EssensialApp"
+               ReferencedContainer = "container:EssensialApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -40,13 +27,21 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:CI_ios.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D12953922C12AE6F003F1769"
+               BuildableName = "EssensialAppTests.xctest"
+               BlueprintName = "EssensialAppTests"
+               ReferencedContainer = "container:EssensialApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -58,6 +53,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D129537C2C12AE6E003F1769"
+            BuildableName = "EssensialApp.app"
+            BlueprintName = "EssensialApp"
+            ReferencedContainer = "container:EssensialApp.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -65,15 +70,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D1957AD62B855D500020F72A"
-            BuildableName = "EssensialFeed.framework"
-            BlueprintName = "EssensialFeed"
-            ReferencedContainer = "container:EssensialFeed.xcodeproj">
+            BlueprintIdentifier = "D129537C2C12AE6E003F1769"
+            BuildableName = "EssensialApp.app"
+            BlueprintName = "EssensialApp"
+            ReferencedContainer = "container:EssensialApp.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
