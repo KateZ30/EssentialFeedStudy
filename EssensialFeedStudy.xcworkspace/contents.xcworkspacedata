@@ -13,4 +13,7 @@
    <FileRef
       location = "group:../EssensialApp.xctestplan">
    </FileRef>
+   <FileRef
+      location = "group:../EssensialApp.xctestplan">
+   </FileRef>
 </Workspace>
