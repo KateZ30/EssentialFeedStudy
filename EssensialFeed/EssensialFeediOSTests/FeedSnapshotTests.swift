@@ -7,6 +7,8 @@
 
 import XCTest
 import EssensialFeediOS
+import EssensialFeed
+import UIKit
 
 class FeedSnapshotTests: XCTestCase {
     func test_emptyFeed() {
@@ -15,6 +17,14 @@ class FeedSnapshotTests: XCTestCase {
         sut.display(emptyFeed())
 
         record(snapshot: sut.snapshot(), named: "EMPTY_FEED")
+    }
+
+    func test_feedWithContent() {
+        let sut = makeSUT()
+
+        sut.display(feedWithContent())
+
+        record(snapshot: sut.snapshot(), named: "FEED_WITH_CONTENT")
     }
 
     // MARK: - Helpers
@@ -28,6 +38,26 @@ class FeedSnapshotTests: XCTestCase {
 
     private func emptyFeed() -> [FeedImageCellController] {
         return []
+    }
+
+    private func feedWithContent() -> [ImageStub] {
+        [
+            ImageStub(
+                description: "Description 1",
+                location: "Location 1",
+                image: UIImage.make(withColor: .red)
+            ),
+            ImageStub(
+                description: "Description 2",
+                location: "Location 2",
+                image: UIImage.make(withColor: .green)
+            ),
+            ImageStub(
+                description: "Description 3",
+                location: "Location 3",
+                image: UIImage.make(withColor: .blue)
+            )
+        ]
     }
 
     private func record(snapshot: UIImage, named name: String, file: StaticString = #filePath, line: UInt = #line) {
@@ -54,4 +84,34 @@ extension UIViewController {
             view.layer.render(in: action.cgContext)
         }
     }
+}
+
+private extension FeedViewController {
+    func display(_ stubs: [ImageStub]) {
+        let cells: [FeedImageCellController] = stubs.map { stub in
+            let controller = FeedImageCellController(delegate: stub)
+            stub.controller = controller
+            return controller
+        }
+
+        display(cells)
+    }
+}
+
+private class ImageStub: FeedImageCellControllerDelegate {
+    let viewModel: FeedImageViewModel<UIImage>
+    weak var controller: FeedImageCellController?
+
+    init(description: String?, location: String?, image: UIImage?) {
+        viewModel = FeedImageViewModel(description: description,
+                                       location: location,
+                                       image: image,
+                                       isLoading: false,
+                                       shouldRetry: image == nil)
+    }
+
+    func didRequestImage() {
+        controller?.display(viewModel)
+    }
+    func didCancelImageRequest() {}
 }
