@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D11666A12BAE2BE5005A4DB2 /* CodableFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11666A02BAE2BE5005A4DB2 /* CodableFeedStore.swift */; };
+		D11698342C2E3C80000AE1E6 /* FeedSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11698332C2E3C80000AE1E6 /* FeedSnapshotTests.swift */; };
 		D12953712C116244003F1769 /* CoreDataFeedStore+FeedImageDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12953702C116244003F1769 /* CoreDataFeedStore+FeedImageDataStore.swift */; };
 		D12953732C116A9A003F1769 /* CoreDataFeedStore+FeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12953722C116A9A003F1769 /* CoreDataFeedStore+FeedStore.swift */; };
 		D12953F62C20EE22003F1769 /* FeedCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12953F52C20EE22003F1769 /* FeedCache.swift */; };
@@ -144,6 +145,7 @@
 
 /* Begin PBXFileReference section */
 		D11666A02BAE2BE5005A4DB2 /* CodableFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFeedStore.swift; sourceTree = "<group>"; };
+		D11698332C2E3C80000AE1E6 /* FeedSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSnapshotTests.swift; sourceTree = "<group>"; };
 		D129536F2C116132003F1769 /* FeedStore 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "FeedStore 2.xcdatamodel"; sourceTree = "<group>"; };
 		D12953702C116244003F1769 /* CoreDataFeedStore+FeedImageDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataFeedStore+FeedImageDataStore.swift"; sourceTree = "<group>"; };
 		D12953722C116A9A003F1769 /* CoreDataFeedStore+FeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataFeedStore+FeedStore.swift"; sourceTree = "<group>"; };
@@ -575,6 +577,7 @@
 			children = (
 				D1B4D2682BE97CA20018F7DE /* Feed Presentation */,
 				D1EC5DB32BD8489700ED8E1F /* EssensialFeediOS.xctestplan */,
+				D11698332C2E3C80000AE1E6 /* FeedSnapshotTests.swift */,
 			);
 			path = EssensialFeediOSTests;
 			sourceTree = "<group>";
@@ -926,6 +929,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1B4D26A2BE97CBE0018F7DE /* FeedLocalizationTests.swift in Sources */,
+				D11698342C2E3C80000AE1E6 /* FeedSnapshotTests.swift in Sources */,
 				D1B4D2332BDCB3160018F7DE /* SharedTestHelpers.swift in Sources */,
 				D15CFCDF2BD9EE0E00C2953B /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
