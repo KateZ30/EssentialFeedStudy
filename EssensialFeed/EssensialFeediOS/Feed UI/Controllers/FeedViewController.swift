@@ -15,6 +15,8 @@ public protocol FeedViewControllerDelegate {
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView , FeedErrorView {
     public var delegate: FeedViewControllerDelegate?
 
+    private var loadingControllers = [IndexPath: FeedImageCellController]()
+
     private var tableModel: [FeedImageCellController] = [] {
         didSet {
             tableView.reloadData()
@@ -38,6 +40,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
 
     public func display(_ cellControllers: [FeedImageCellController]) {
+        loadingControllers = [:]
         tableModel = cellControllers
     }
 
@@ -50,6 +53,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
 
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard tableModel.count > indexPath.row else { return }
         cancelCellControllerLoad(for: indexPath)
     }
 
@@ -64,11 +68,14 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
 
     private func cellController(for indexPath: IndexPath) -> FeedImageCellController {
-        return tableModel[indexPath.row]
+        let controller = tableModel[indexPath.row]
+        loadingControllers[indexPath] = controller
+        return controller
     }
 
     private func cancelCellControllerLoad(for indexPath: IndexPath) {
-        tableModel[indexPath.row].cancelLoad()
+        loadingControllers[indexPath]?.cancelLoad()
+        loadingControllers[indexPath] = nil
     }
 
     // MARK: - FeedErrorView

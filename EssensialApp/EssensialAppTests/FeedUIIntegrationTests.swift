@@ -68,6 +68,20 @@ final class FeedUIIntegrationTests: XCTestCase {
         assertThat(sut, isRendering: [image0, image1, image2, image3])
     }
 
+    func test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed() {
+        let image0 = makeImage(description: "a description", location: "a location")
+        let image1 = makeImage(description: nil, location: "another location")
+        let (sut, loader) = makeSUT()
+
+        sut.simulateAppearance()
+        loader.completeFeedLoading(with: [image0, image1], at: 0)
+        assertThat(sut, isRendering: [image0, image1])
+
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeFeedLoading(with: [], at: 1)
+        assertThat(sut, isRendering: [])
+    }
+
     func test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError() {
         let image0 = makeImage()
         let (sut, loader) = makeSUT()
@@ -335,6 +349,8 @@ final class FeedUIIntegrationTests: XCTestCase {
     }
 
     private func assertThat(_ sut: FeedViewController, isRendering feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
+        sut.tableView.enforceLayoutCycle()
+
         guard feed.count == sut.numberOfRenderedFeedImageViews else {
             return XCTFail("Expected \(feed.count) images, got \(sut.numberOfRenderedFeedImageViews) instead", file: file, line: line)
         }
@@ -342,6 +358,12 @@ final class FeedUIIntegrationTests: XCTestCase {
         feed.enumerated().forEach { index, image in
             assertThat(sut, hasViewConfiguredFor: image, at: index, file: file, line: line)
         }
+
+        executeRunLoopToCleanUpReferences()
+    }
+
+    private func executeRunLoopToCleanUpReferences() {
+        RunLoop.current.run(until: Date())
     }
 
     class LoaderSpy: FeedLoader, FeedImageDataLoader {
@@ -386,5 +408,12 @@ final class FeedUIIntegrationTests: XCTestCase {
             let error = NSError(domain: "an error", code: 0)
             imageRequests[index].completion(.failure(error))
         }
+    }
+}
+
+private extension UIView {
+    func enforceLayoutCycle() {
+        layoutIfNeeded()
+        RunLoop.current.run(until: Date())
     }
 }
