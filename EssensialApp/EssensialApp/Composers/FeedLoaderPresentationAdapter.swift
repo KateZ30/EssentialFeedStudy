@@ -21,15 +21,16 @@ final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
     func didRequestFeedRefresh() {
         presenter?.didStartLoadingFeed()
 
-        cancellable = feedLoader().sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.presenter?.didFinishLoadingFeed(with: error)
-                }
-            },
-            receiveValue: { [weak self] feed in
-                self?.presenter?.didFinishLoadingFeed(with: feed)
-            }
-        )
+        cancellable = feedLoader()
+            .dispatchOnMainQueue()
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    if case let .failure(error) = completion {
+                        self?.presenter?.didFinishLoadingFeed(with: error)
+                    }
+                },
+                receiveValue: { [weak self] feed in
+                    self?.presenter?.didFinishLoadingFeed(with: feed)
+                })
     }
 }
