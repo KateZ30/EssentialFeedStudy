@@ -5,15 +5,18 @@
 //  Created by Kate Zemskova on 5/10/24.
 //
 
+import Combine
+import Foundation
 import UIKit
 import EssensialFeed
 import EssensialFeediOS
 
 final class FeedViewAdapter: FeedView {
     private weak var controller: FeedViewController?
-    private let imageLoader: FeedImageDataLoader
+    private let imageLoader: (URL) -> FeedImageDataLoader.Publisher
 
-    init(controller: FeedViewController?, imageLoader: FeedImageDataLoader) {
+    init(controller: FeedViewController?,
+         imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) {
         self.controller = controller
         self.imageLoader = imageLoader
     }
