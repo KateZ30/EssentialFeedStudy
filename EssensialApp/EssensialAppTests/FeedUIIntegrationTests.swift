@@ -8,7 +8,8 @@
 import XCTest
 import UIKit
 import EssensialFeed
-@testable import EssensialFeediOS
+import EssensialFeediOS
+import EssensialApp
 
 final class FeedUIIntegrationTests: XCTestCase {
     func test_feedView_hasTitle() {
@@ -65,6 +66,20 @@ final class FeedUIIntegrationTests: XCTestCase {
         sut.simulateUserInitiatedFeedReload()
         loader.completeFeedLoading(with: [image0, image1, image2, image3], at: 1)
         assertThat(sut, isRendering: [image0, image1, image2, image3])
+    }
+
+    func test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed() {
+        let image0 = makeImage(description: "a description", location: "a location")
+        let image1 = makeImage(description: nil, location: "another location")
+        let (sut, loader) = makeSUT()
+
+        sut.simulateAppearance()
+        loader.completeFeedLoading(with: [image0, image1], at: 0)
+        assertThat(sut, isRendering: [image0, image1])
+
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeFeedLoading(with: [], at: 1)
+        assertThat(sut, isRendering: [])
     }
 
     func test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError() {
@@ -305,7 +320,8 @@ final class FeedUIIntegrationTests: XCTestCase {
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (FeedViewController, LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = FeedUIComposer.feedComposedWith(feedLoader: loader, imageLoader: loader)
+        let sut = FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher,
+                                                  imageLoader: loader.loadImageDataPublisher)
 
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
@@ -334,6 +350,8 @@ final class FeedUIIntegrationTests: XCTestCase {
     }
 
     private func assertThat(_ sut: FeedViewController, isRendering feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
+        sut.tableView.enforceLayoutCycle()
+
         guard feed.count == sut.numberOfRenderedFeedImageViews else {
             return XCTFail("Expected \(feed.count) images, got \(sut.numberOfRenderedFeedImageViews) instead", file: file, line: line)
         }
@@ -341,6 +359,12 @@ final class FeedUIIntegrationTests: XCTestCase {
         feed.enumerated().forEach { index, image in
             assertThat(sut, hasViewConfiguredFor: image, at: index, file: file, line: line)
         }
+
+        executeRunLoopToCleanUpReferences()
+    }
+
+    private func executeRunLoopToCleanUpReferences() {
+        RunLoop.current.run(until: Date())
     }
 
     class LoaderSpy: FeedLoader, FeedImageDataLoader {
@@ -388,14 +412,9 @@ final class FeedUIIntegrationTests: XCTestCase {
     }
 }
 
-private extension UIImage {
-    static func make(withColor color: UIColor) -> UIImage {
-        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 1
-        return UIGraphicsImageRenderer(size: rect.size, format: format).image { context in
-            color.setFill()
-            context.fill(rect)
-        }
+private extension UIView {
+    func enforceLayoutCycle() {
+        layoutIfNeeded()
+        RunLoop.current.run(until: Date())
     }
 }

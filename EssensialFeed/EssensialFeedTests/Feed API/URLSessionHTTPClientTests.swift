@@ -69,15 +69,30 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
     }
 
+    func test_cancelGetFromURLTask_cancelsURLRequest() {
+        let sut = makeSUT()
+        let exp = expectation(description: "Wait for request")
+
+        let task = sut.get(from: anyURL()) { result in
+            switch result {
+                case let .failure(error as NSError) where error.code == URLError.cancelled.rawValue:
+                    break
+            default:
+                XCTFail("Expected cancelled result, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+
+        task.cancel()
+
+        wait(for: [exp], timeout: 1)
+    }
+
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> HTTPClient {
         let sut = URLSessionHTTPClient()
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
-    }
-
-    private func anyData() -> Data {
-        return Data("any data".utf8)
     }
 
     private func anyHTTPURLResponse() -> HTTPURLResponse {

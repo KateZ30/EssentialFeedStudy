@@ -64,14 +64,26 @@ extension FeedViewController {
         return errorView.message
     }
 
+    func renderedFeedImageData(at index: Int) -> Data? {
+        return simulateFeedImageViewVisible(at: index)?.renderedImage
+    }
+
     func feedImageView(at row: Int) -> UITableViewCell? {
+        guard numberOfRenderedFeedImageViews > row else {
+            return nil
+        }
         let ds = tableView.dataSource
         let index = IndexPath(row: row, section: feedImagesSection)
         return ds?.tableView(tableView, cellForRowAt: index)
     }
 
     private func prepareForFirstAppearance() {
+        setSmallFrameToPreventRenderingCells()
         replaceRefreshControlWithSpyForiOS17Support()
+    }
+
+    private func setSmallFrameToPreventRenderingCells() {
+        tableView.frame = CGRect(x: 0, y: 0, width: 390, height: 1)
     }
 
     private func replaceRefreshControlWithSpyForiOS17Support() {

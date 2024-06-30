@@ -29,7 +29,7 @@ final class EssensialFeedCacheIntegrationTests: XCTestCase {
     func test_load_deliversItemsSavedOnASeparateInstance() {
         let sutToPerformSave = makeSUT()
         let sutToPerformLoad = makeSUT()
-        let feed = uniqueFeed().models
+        let feed = uniqueImageFeed().models
 
         save(feed, with: sutToPerformSave)
 
@@ -40,8 +40,8 @@ final class EssensialFeedCacheIntegrationTests: XCTestCase {
         let sutToPerformFirstSave = makeSUT()
         let sutToPerformLastSave = makeSUT()
         let sutToPerformLoad = makeSUT()
-        let firstFeed = uniqueFeed().models
-        let lastFeed = uniqueFeed().models
+        let firstFeed = uniqueImageFeed().models
+        let lastFeed = uniqueImageFeed().models
 
         save(firstFeed, with: sutToPerformFirstSave)
 
@@ -95,8 +95,10 @@ final class EssensialFeedCacheIntegrationTests: XCTestCase {
 
     private func save(_ feed: [FeedImage], with sut: LocalFeedLoader, file: StaticString = #filePath, line: UInt = #line) {
         let saveExp = expectation(description: "Wait for save completion")
-        sut.save(feed) { saveError in
-            XCTAssertNil(saveError, "Expected successful save result", file: file, line: line)
+        sut.save(feed) { result in
+            if case let .failure(error) = result {
+                XCTFail("Expected successful save result, got \(error) instead", file: file, line: line)
+            }
             saveExp.fulfill()
         }
         wait(for: [saveExp], timeout: 1.0)

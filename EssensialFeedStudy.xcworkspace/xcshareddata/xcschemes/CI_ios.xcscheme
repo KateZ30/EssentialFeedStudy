@@ -17,7 +17,7 @@
                BlueprintIdentifier = "D1957AD62B855D500020F72A"
                BuildableName = "EssensialFeed.framework"
                BlueprintName = "EssensialFeed"
-               ReferencedContainer = "container:EssensialFeed.xcodeproj">
+               ReferencedContainer = "container:EssensialFeed/EssensialFeed.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "D1EC5D9D2BD8481000ED8E1F"
                BuildableName = "EssensialFeediOS.framework"
                BlueprintName = "EssensialFeediOS"
-               ReferencedContainer = "container:EssensialFeed.xcodeproj">
+               ReferencedContainer = "container:EssensialFeed/EssensialFeed.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -43,7 +43,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:CI_ios.xctestplan"
+            reference = "container:EssensialFeed/CI_ios.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -71,7 +71,7 @@
             BlueprintIdentifier = "D1957AD62B855D500020F72A"
             BuildableName = "EssensialFeed.framework"
             BlueprintName = "EssensialFeed"
-            ReferencedContainer = "container:EssensialFeed.xcodeproj">
+            ReferencedContainer = "container:EssensialFeed/EssensialFeed.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
