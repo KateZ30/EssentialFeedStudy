@@ -84,8 +84,14 @@ class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
 
     func test_load_deliversItemsOn2xxHttpResponseWithJSONList() {
         let (sut, client) = makeSUT()
-        let item1 = makeItem(id: UUID(), imageURL: URL(string: "http://a-url.com")!)
-        let item2 = makeItem(id: UUID(), description: "a description", location: "a location", imageURL: URL(string: "http://another-url.com")!)
+        let item1 = makeItem(id: UUID(),
+                             message: "a message",
+                             createdAt: (Date(timeIntervalSince1970: 1720220256), "2024-07-05T22:57:36+00:00"),
+                             username: "user 1")
+        let item2 = makeItem(id: UUID(),
+                             message: "a message",
+                             createdAt: (Date(timeIntervalSince1970: 1712260517), "2024-04-04T19:55:17+00:00"),
+                             username: "user 1")
         let itemsJSON = makeItemsJson([item1.json, item2.json])
         let items = [item1.model, item2.model]
 
@@ -123,13 +129,15 @@ class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
         return (sut, client)
     }
 
-    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedImage, json: [String: Any]) {
-        let item = FeedImage(id: id, description: description, location: location, url: imageURL)
-        let json = [
+    private func makeItem(id: UUID, message: String, createdAt: (date: Date, ios8601String: String), username: String) -> (model: ImageComment, json: [String: Any]) {
+        let item = ImageComment(id: id, message: message, createdAt: createdAt.date, username: username)
+        let json: [String: Any] = [
             "id": id.uuidString,
-            "description": description,
-            "location": location,
-            "image": imageURL.absoluteString
+            "message": message,
+            "created_at": createdAt.ios8601String,
+            "author": [
+                "username": username
+            ]
         ].compactMapValues { $0 }
 
         return (item, json)
