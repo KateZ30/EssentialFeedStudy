@@ -24,3 +24,8 @@ func uniqueFeed() -> [FeedImage] {
     [FeedImage(id: UUID(), description: "any", location: "any", url: anyURL())]
 }
 
+extension HTTPURLResponse {
+    convenience init(statusCode: Int) {
+        self.init(url: anyURL(), statusCode: statusCode, httpVersion: nil, headerFields: nil)!
+    }
+}
