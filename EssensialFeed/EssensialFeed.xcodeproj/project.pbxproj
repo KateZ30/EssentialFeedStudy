@@ -94,6 +94,8 @@
 		D1F85F6E2C38ABD100E2C81E /* RemoteImageCommentsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F6D2C38ABD100E2C81E /* RemoteImageCommentsLoader.swift */; };
 		D1F85F702C38AC7400E2C81E /* ImageCommentMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F6F2C38AC7400E2C81E /* ImageCommentMapper.swift */; };
 		D1F85F732C38B05A00E2C81E /* ImageComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F722C38B05A00E2C81E /* ImageComment.swift */; };
+		D1F85F7A2C42017400E2C81E /* RemoteLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F792C42017400E2C81E /* RemoteLoaderTests.swift */; };
+		D1F85F7C2C42022400E2C81E /* RemoteLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F7B2C42022400E2C81E /* RemoteLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -236,6 +238,8 @@
 		D1F85F6D2C38ABD100E2C81E /* RemoteImageCommentsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageCommentsLoader.swift; sourceTree = "<group>"; };
 		D1F85F6F2C38AC7400E2C81E /* ImageCommentMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentMapper.swift; sourceTree = "<group>"; };
 		D1F85F722C38B05A00E2C81E /* ImageComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageComment.swift; sourceTree = "<group>"; };
+		D1F85F792C42017400E2C81E /* RemoteLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteLoaderTests.swift; sourceTree = "<group>"; };
+		D1F85F7B2C42022400E2C81E /* RemoteLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -451,13 +455,13 @@
 		D1957AE32B855D500020F72A /* EssensialFeedTests */ = {
 			isa = PBXGroup;
 			children = (
-				D1F85F772C38B82F00E2C81E /* Image Comment API */,
-				D1F85F762C38B82100E2C81E /* Shared API Infra */,
 				D1957B082B87E7630020F72A /* EssensialFeed.xctestplan */,
-				D1957B042B86FAB70020F72A /* Helpers */,
 				D1957AFD2B85BFA60020F72A /* Feed API */,
 				D13985722B8D4CAD00B4691D /* Feed Cache */,
 				D1D1533B2BEED4B600384E33 /* Feed Presentation */,
+				D1957B042B86FAB70020F72A /* Helpers */,
+				D1F85F772C38B82F00E2C81E /* Image Comment API */,
+				D1F85F762C38B82100E2C81E /* Shared API Infra */,
 			);
 			path = EssensialFeedTests;
 			sourceTree = "<group>";
@@ -633,6 +637,7 @@
 			children = (
 				D1957AF92B85BBB10020F72A /* HTTPClient.swift */,
 				D1957AFE2B86A4C70020F72A /* URLSessionHTTPClient.swift */,
+				D1F85F7B2C42022400E2C81E /* RemoteLoader.swift */,
 			);
 			path = "Shared API Infra";
 			sourceTree = "<group>";
@@ -640,6 +645,7 @@
 		D1F85F762C38B82100E2C81E /* Shared API Infra */ = {
 			isa = PBXGroup;
 			children = (
+				D1F85F792C42017400E2C81E /* RemoteLoaderTests.swift */,
 				D1957B002B86A50F0020F72A /* URLSessionHTTPClientTests.swift */,
 			);
 			path = "Shared API Infra";
@@ -922,6 +928,7 @@
 				D15923192BCA0FE4004B164F /* CoreDataFeedStore.swift in Sources */,
 				D1E595B42B903704008D9A7B /* FeedCachePolicy.swift in Sources */,
 				D1F85F702C38AC7400E2C81E /* ImageCommentMapper.swift in Sources */,
+				D1F85F7C2C42022400E2C81E /* RemoteLoader.swift in Sources */,
 				D12953732C116A9A003F1769 /* CoreDataFeedStore+FeedStore.swift in Sources */,
 				D1957AF82B8596400020F72A /* RemoteFeedLoader.swift in Sources */,
 				D1E595A52B8EE68D008D9A7B /* LocalFeedImage.swift in Sources */,
@@ -964,6 +971,7 @@
 				D1E595A72B8EE999008D9A7B /* LoadFeedFromCacheUseCaseTests.swift in Sources */,
 				D1B0C5192BFFFDAD00919C23 /* CoreDataFeedImageDataStoreTests.swift in Sources */,
 				D1B0C5152BFFF9E800919C23 /* FeedImageDataStoreSpy.swift in Sources */,
+				D1F85F7A2C42017400E2C81E /* RemoteLoaderTests.swift in Sources */,
 				D15923092BCA0BEF004B164F /* XCTestCase+FailableRetrieveFeedStoreSpecs.swift in Sources */,
 				D1E595AC2B8EED76008D9A7B /* SharedTestHelpers.swift in Sources */,
 				D15923052BCA0589004B164F /* FeedStoreSpecs.swift in Sources */,
