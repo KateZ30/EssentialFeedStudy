@@ -1,31 +1,31 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "FEED_VIEW_TITLE" : {
+    "GENERIC_CONNECTION_ERROR" : {
       "extractionState" : "manual",
       "localizations" : {
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "To Feed μου"
+            "value" : "Δεν ήταν δυνατή η σύνδεση με τον διακομιστή"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "My Feed"
+            "value" : "Couldn't connect to server"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meu Feed"
+            "value" : "Não foi possível conectar ao servidor"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mой feed"
+            "value" : "Не удалось подключиться к серверу"
           }
         }
       }
