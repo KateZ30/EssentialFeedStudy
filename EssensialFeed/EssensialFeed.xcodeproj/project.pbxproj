@@ -103,6 +103,7 @@
 		D1F85F9D2C4F418A00E2C81E /* ImageCommentsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F9C2C4F418A00E2C81E /* ImageCommentsPresenter.swift */; };
 		D1F85F9F2C4F41F500E2C81E /* ImageComments.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D1F85F9E2C4F41F500E2C81E /* ImageComments.xcstrings */; };
 		D1F85FA12C4F424D00E2C81E /* ImageCommentsLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85FA02C4F424D00E2C81E /* ImageCommentsLocalizationTests.swift */; };
+		D1F85FA32C4F43FC00E2C81E /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85FA22C4F43FC00E2C81E /* Date+Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -254,6 +255,7 @@
 		D1F85F9C2C4F418A00E2C81E /* ImageCommentsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsPresenter.swift; sourceTree = "<group>"; };
 		D1F85F9E2C4F41F500E2C81E /* ImageComments.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = ImageComments.xcstrings; sourceTree = "<group>"; };
 		D1F85FA02C4F424D00E2C81E /* ImageCommentsLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsLocalizationTests.swift; sourceTree = "<group>"; };
+		D1F85FA22C4F43FC00E2C81E /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -519,6 +521,7 @@
 				D1957B022B86FA190020F72A /* XCTestCase+MemoryLeakTracking.swift */,
 				D1E595AB2B8EED76008D9A7B /* SharedTestHelpers.swift */,
 				D1F85F8D2C4F033F00E2C81E /* SharedLocalizationTestHelpers.swift */,
+				D1F85FA22C4F43FC00E2C81E /* Date+Helpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -993,6 +996,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1E595B62B96C4AA008D9A7B /* CodableFeedStoreTests.swift in Sources */,
+				D1F85FA32C4F43FC00E2C81E /* Date+Helpers.swift in Sources */,
 				D15923242BCA1032004B164F /* CoreDataFeedStoreTests.swift in Sources */,
 				D1957AF52B8560780020F72A /* FeedItemsMapperTests.swift in Sources */,
 				D1E595B22B902FF8008D9A7B /* FeedCache+Helpers.swift in Sources */,
