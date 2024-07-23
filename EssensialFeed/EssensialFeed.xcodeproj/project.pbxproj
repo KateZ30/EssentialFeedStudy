@@ -70,7 +70,7 @@
 		D1D153432BF6BA4A00384E33 /* Feed.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D1D1533E2BF6B06E00384E33 /* Feed.xcstrings */; };
 		D1D153452BF6BA9400384E33 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D153442BF6BA9400384E33 /* FeedViewModel.swift */; };
 		D1D153472BF6BAA200384E33 /* ResourceLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D153462BF6BAA200384E33 /* ResourceLoadingViewModel.swift */; };
-		D1D153492BF6BAAD00384E33 /* FeedErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D153482BF6BAAD00384E33 /* FeedErrorViewModel.swift */; };
+		D1D153492BF6BAAD00384E33 /* ResourceErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D153482BF6BAAD00384E33 /* ResourceErrorViewModel.swift */; };
 		D1D1534B2BF6BC8500384E33 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D1534A2BF6BC8500384E33 /* ErrorView.swift */; };
 		D1D1534C2BF8029A00384E33 /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B4D2402BE17FE40018F7DE /* FeedImageDataLoader.swift */; };
 		D1D153502BF8077400384E33 /* RemoteFeedImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D1534F2BF8077400384E33 /* RemoteFeedImageDataLoaderTests.swift */; };
@@ -97,6 +97,7 @@
 		D1F85F8E2C4F033F00E2C81E /* SharedLocalizationTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F8D2C4F033F00E2C81E /* SharedLocalizationTestHelpers.swift */; };
 		D1F85F8F2C4F046400E2C81E /* FeedLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B4D2692BE97CBE0018F7DE /* FeedLocalizationTests.swift */; };
 		D1F85F912C4F2D0F00E2C81E /* ResourceLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F902C4F2D0F00E2C81E /* ResourceLoadingView.swift */; };
+		D1F85F932C4F2DD600E2C81E /* ResourceErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85F922C4F2DD600E2C81E /* ResourceErrorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -213,7 +214,7 @@
 		D1D153412BF6B97B00384E33 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
 		D1D153442BF6BA9400384E33 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
 		D1D153462BF6BAA200384E33 /* ResourceLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoadingViewModel.swift; sourceTree = "<group>"; };
-		D1D153482BF6BAAD00384E33 /* FeedErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedErrorViewModel.swift; sourceTree = "<group>"; };
+		D1D153482BF6BAAD00384E33 /* ResourceErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceErrorViewModel.swift; sourceTree = "<group>"; };
 		D1D1534A2BF6BC8500384E33 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		D1D1534D2BF804DE00384E33 /* CI_macos.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_macos.xctestplan; sourceTree = "<group>"; };
 		D1D1534E2BF804DE00384E33 /* CI_ios.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_ios.xctestplan; sourceTree = "<group>"; };
@@ -242,6 +243,7 @@
 		D1F85F8B2C4F005900E2C81E /* SharedLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLocalizationTests.swift; sourceTree = "<group>"; };
 		D1F85F8D2C4F033F00E2C81E /* SharedLocalizationTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLocalizationTestHelpers.swift; sourceTree = "<group>"; };
 		D1F85F902C4F2D0F00E2C81E /* ResourceLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoadingView.swift; sourceTree = "<group>"; };
+		D1F85F922C4F2DD600E2C81E /* ResourceErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceErrorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -572,7 +574,6 @@
 				D1D1533E2BF6B06E00384E33 /* Feed.xcstrings */,
 				D1D153412BF6B97B00384E33 /* FeedPresenter.swift */,
 				D1D153442BF6BA9400384E33 /* FeedViewModel.swift */,
-				D1D153482BF6BAAD00384E33 /* FeedErrorViewModel.swift */,
 			);
 			path = "Feed Presentation";
 			sourceTree = "<group>";
@@ -662,9 +663,11 @@
 		D1F85F862C4EF90500E2C81E /* Shared Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D1F85F872C4EF95300E2C81E /* LoadResourcePresenter.swift */,
+				D1F85F922C4F2DD600E2C81E /* ResourceErrorView.swift */,
+				D1D153482BF6BAAD00384E33 /* ResourceErrorViewModel.swift */,
 				D1F85F902C4F2D0F00E2C81E /* ResourceLoadingView.swift */,
 				D1D153462BF6BAA200384E33 /* ResourceLoadingViewModel.swift */,
-				D1F85F872C4EF95300E2C81E /* LoadResourcePresenter.swift */,
 				D1F85F892C4EFE8100E2C81E /* Shared.xcstrings */,
 			);
 			path = "Shared Presentation";
@@ -937,6 +940,7 @@
 				D129540B2C2A17CE003F1769 /* FeedImageDataCache.swift in Sources */,
 				D1B0C5112BFFF64200919C23 /* LocalFeedImageDataLoader.swift in Sources */,
 				D15923172BCA0FE4004B164F /* CoreDataHelpers.swift in Sources */,
+				D1F85F932C4F2DD600E2C81E /* ResourceErrorView.swift in Sources */,
 				D15923192BCA0FE4004B164F /* CoreDataFeedStore.swift in Sources */,
 				D1E595B42B903704008D9A7B /* FeedCachePolicy.swift in Sources */,
 				D1F85F702C38AC7400E2C81E /* ImageCommentMapper.swift in Sources */,
@@ -953,7 +957,7 @@
 				D1957AFF2B86A4C70020F72A /* URLSessionHTTPClient.swift in Sources */,
 				D1F85F912C4F2D0F00E2C81E /* ResourceLoadingView.swift in Sources */,
 				D1D1534C2BF8029A00384E33 /* FeedImageDataLoader.swift in Sources */,
-				D1D153492BF6BAAD00384E33 /* FeedErrorViewModel.swift in Sources */,
+				D1D153492BF6BAAD00384E33 /* ResourceErrorViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

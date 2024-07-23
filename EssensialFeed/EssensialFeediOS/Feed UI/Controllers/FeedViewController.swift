@@ -12,7 +12,7 @@ public protocol FeedViewControllerDelegate {
     func didRequestFeedRefresh()
 }
 
-final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView , FeedErrorView {
+final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView , ResourceErrorView {
     public var delegate: FeedViewControllerDelegate?
 
     private var loadingControllers = [IndexPath: FeedImageCellController]()
@@ -79,7 +79,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
 
     // MARK: - FeedErrorView
-    public func display(_ viewModel: FeedErrorViewModel) {
+    public func display(_ viewModel: ResourceErrorViewModel) {
         errorView.message = viewModel.message
     }
 
