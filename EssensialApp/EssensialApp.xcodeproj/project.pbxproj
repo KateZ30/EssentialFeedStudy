@@ -33,6 +33,7 @@
 		D16573462C2E062B00880D08 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D165732F2C2E05B400880D08 /* FeedUIComposer.swift */; };
 		D16573472C2E062B00880D08 /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16573312C2E05B400880D08 /* WeakRefVirtualProxy.swift */; };
 		D165734A2C2E102900880D08 /* FeedAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16573482C2E0B4500880D08 /* FeedAcceptanceTests.swift */; };
+		D1F85FA52C4F4A1200E2C81E /* EssensialApp.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = D1F85FA42C4F4A1200E2C81E /* EssensialApp.xctestplan */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		D165733A2C2E05E700880D08 /* UIRefreshControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		D16573402C2E060700880D08 /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
 		D16573482C2E0B4500880D08 /* FeedAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAcceptanceTests.swift; sourceTree = "<group>"; };
+		D1F85FA42C4F4A1200E2C81E /* EssensialApp.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EssensialApp.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 		D12953742C12AE6E003F1769 = {
 			isa = PBXGroup;
 			children = (
+				D1F85FA42C4F4A1200E2C81E /* EssensialApp.xctestplan */,
 				D129537F2C12AE6E003F1769 /* EssensialApp */,
 				D12953962C12AE6F003F1769 /* EssensialAppTests */,
 				D129537E2C12AE6E003F1769 /* Products */,
@@ -273,6 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1F85FA52C4F4A1200E2C81E /* EssensialApp.xctestplan in Resources */,
 				D129538A2C12AE6F003F1769 /* Assets.xcassets in Resources */,
 				D129538D2C12AE6F003F1769 /* Base in Resources */,
 			);

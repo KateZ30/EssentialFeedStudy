@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "73CBE0EB-9B01-4F72-A83D-57BB0DE00839",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/EssensialApp\/EssensialApp.xcodeproj",
+        "identifier" : "D12953922C12AE6F003F1769",
+        "name" : "EssensialAppTests"
+      }
+    }
+  ],
+  "version" : 1
+}
