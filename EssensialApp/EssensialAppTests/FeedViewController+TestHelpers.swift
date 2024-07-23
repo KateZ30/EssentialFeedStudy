@@ -8,7 +8,7 @@
 import UIKit
 import EssensialFeediOS
 
-extension FeedViewController {
+extension ListViewController {
     func simulateAppearance() {
         if !isViewLoaded {
             loadViewIfNeeded()

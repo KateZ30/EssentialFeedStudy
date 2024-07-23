@@ -319,7 +319,7 @@ final class FeedUIIntegrationTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (FeedViewController, LoaderSpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (ListViewController, LoaderSpy) {
         let loader = LoaderSpy()
         let sut = FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher,
                                                   imageLoader: loader.loadImageDataPublisher)
@@ -338,7 +338,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         UIImage.make(withColor: .red).pngData()!
     }
 
-    private func assertThat(_ sut: FeedViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    private func assertThat(_ sut: ListViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.feedImageView(at: index)
 
         guard let cell = view as? FeedImageCell else {
@@ -350,7 +350,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(cell.descriptionLabel.text, image.description, "Expected description label to be \(String(describing: image.description)) for image \(index)", file: file, line: line)
     }
 
-    private func assertThat(_ sut: FeedViewController, isRendering feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
+    private func assertThat(_ sut: ListViewController, isRendering feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
         sut.tableView.enforceLayoutCycle()
 
         guard feed.count == sut.numberOfRenderedFeedImageViews else {
