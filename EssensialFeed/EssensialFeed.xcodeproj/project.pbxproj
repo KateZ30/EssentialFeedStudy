@@ -321,9 +321,7 @@
 			isa = PBXGroup;
 			children = (
 				D1B4D2382BE074A90018F7DE /* UIView+Shimmering.swift */,
-				D1B4D25F2BE973540018F7DE /* UITableView+Dequeueing.swift */,
 				D1B4D2612BE974500018F7DE /* UIImageView+Animated.swift */,
-				D116983E2C2F6E7E000AE1E6 /* UITableView+HeaderSizing.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -547,7 +545,6 @@
 		D1B4D23D2BE17F950018F7DE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D15CFCE52BD9F9B700C2953B /* ListViewController.swift */,
 				D1B4D2442BE189010018F7DE /* FeedImageCellController.swift */,
 			);
 			path = Controllers;
@@ -560,7 +557,6 @@
 				D1B4D25B2BE6EC440018F7DE /* Feed.storyboard */,
 				D1B4D25C2BE6EC440018F7DE /* Feed.xcassets */,
 				D1B4D2342BDCB49A0018F7DE /* FeedImageCell.swift */,
-				D1D1534A2BF6BC8500384E33 /* ErrorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -703,8 +699,36 @@
 		D1F85FA62C50484600E2C81E /* Shared UI */ = {
 			isa = PBXGroup;
 			children = (
+				D1F85FA82C504A9900E2C81E /* Views */,
+				D1F85FA72C504A8600E2C81E /* Controllers */,
 			);
 			path = "Shared UI";
+			sourceTree = "<group>";
+		};
+		D1F85FA72C504A8600E2C81E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				D15CFCE52BD9F9B700C2953B /* ListViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		D1F85FA82C504A9900E2C81E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D1F85FA92C504ABE00E2C81E /* Helpers */,
+				D1D1534A2BF6BC8500384E33 /* ErrorView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D1F85FA92C504ABE00E2C81E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D116983E2C2F6E7E000AE1E6 /* UITableView+HeaderSizing.swift */,
+				D1B4D25F2BE973540018F7DE /* UITableView+Dequeueing.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
