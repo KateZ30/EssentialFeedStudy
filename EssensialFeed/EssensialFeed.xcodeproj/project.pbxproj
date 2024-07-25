@@ -123,6 +123,7 @@
 		D1F85FD92C50544500E2C81E /* ImageCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85FD82C50544500E2C81E /* ImageCommentCell.swift */; };
 		D1F85FDD2C50584100E2C81E /* COMMENTS_WITH_CONTENT_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = D1F85FDA2C50584100E2C81E /* COMMENTS_WITH_CONTENT_dark.png */; };
 		D1F85FDE2C50584100E2C81E /* COMMENTS_WITH_CONTENT_light.png in Resources */ = {isa = PBXBuildFile; fileRef = D1F85FDB2C50584100E2C81E /* COMMENTS_WITH_CONTENT_light.png */; };
+		D1F85FE02C52FE3300E2C81E /* CellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85FDF2C52FE3300E2C81E /* CellController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -294,6 +295,7 @@
 		D1F85FD82C50544500E2C81E /* ImageCommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentCell.swift; sourceTree = "<group>"; };
 		D1F85FDA2C50584100E2C81E /* COMMENTS_WITH_CONTENT_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = COMMENTS_WITH_CONTENT_dark.png; sourceTree = "<group>"; };
 		D1F85FDB2C50584100E2C81E /* COMMENTS_WITH_CONTENT_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = COMMENTS_WITH_CONTENT_light.png; sourceTree = "<group>"; };
+		D1F85FDF2C52FE3300E2C81E /* CellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -752,6 +754,7 @@
 			isa = PBXGroup;
 			children = (
 				D15CFCE52BD9F9B700C2953B /* ListViewController.swift */,
+				D1F85FDF2C52FE3300E2C81E /* CellController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1226,6 +1229,7 @@
 				D1B4D2622BE974500018F7DE /* UIImageView+Animated.swift in Sources */,
 				D116983F2C2F6E7E000AE1E6 /* UITableView+HeaderSizing.swift in Sources */,
 				D15CFCE62BD9F9B700C2953B /* ListViewController.swift in Sources */,
+				D1F85FE02C52FE3300E2C81E /* CellController.swift in Sources */,
 				D1B4D2352BDCB49A0018F7DE /* FeedImageCell.swift in Sources */,
 				D1B4D2452BE189010018F7DE /* FeedImageCellController.swift in Sources */,
 				D1D1534B2BF6BC8500384E33 /* ErrorView.swift in Sources */,

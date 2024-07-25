@@ -8,8 +8,6 @@
 import UIKit
 import EssensialFeed
 
-public typealias CellController = UITableViewDataSource & UITableViewDelegate & UITableViewDataSourcePrefetching
-
 final public class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView , ResourceErrorView {
     public var onRefresh: (() -> Void)?
 
@@ -47,25 +45,27 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     }
 
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        cellController(for: indexPath).tableView(tableView, cellForRowAt: indexPath)
+        let ds = cellController(for: indexPath).dataSource
+        return ds.tableView(tableView, cellForRowAt: indexPath)
     }
 
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard tableModel.count > indexPath.row else { return }
-        let controller = removeLoadingController(for: indexPath)
-        controller?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
+        let dl = removeLoadingController(for: indexPath)?.delegate
+        dl?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
 
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            cellController(for: indexPath).tableView(tableView, prefetchRowsAt: [indexPath])
+            let dsp = cellController(for: indexPath).dataSourcePrefetching
+            dsp?.tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }
 
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let controller = removeLoadingController(for: indexPath)
-            controller?.tableView?(tableView, cancelPrefetchingForRowsAt:[indexPath])
+            let dsp = removeLoadingController(for: indexPath)?.dataSourcePrefetching
+            dsp?.tableView?(tableView, cancelPrefetchingForRowsAt:[indexPath])
         }
     }
 
