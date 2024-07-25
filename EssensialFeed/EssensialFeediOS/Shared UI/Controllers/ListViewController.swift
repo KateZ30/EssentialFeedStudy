@@ -8,14 +8,7 @@
 import UIKit
 import EssensialFeed
 
-public protocol CellController {
-    func view(in tableView: UITableView) -> UITableViewCell
-}
-
-public extension CellController {
-    func preload() {}
-    func cancelLoad() {}
-}
+public typealias CellController = UITableViewDataSource & UITableViewDelegate & UITableViewDataSourcePrefetching
 
 final public class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView , ResourceErrorView {
     public var onRefresh: (() -> Void)?
@@ -54,22 +47,26 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     }
 
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return cellController(for: indexPath).view(in: tableView)
+        cellController(for: indexPath).tableView(tableView, cellForRowAt: indexPath)
     }
 
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard tableModel.count > indexPath.row else { return }
-        cancelCellControllerLoad(for: indexPath)
+        let controller = removeLoadingController(for: indexPath)
+        controller?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
 
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            cellController(for: indexPath).preload()
+            cellController(for: indexPath).tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }
 
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(cancelCellControllerLoad)
+        indexPaths.forEach { indexPath in
+            let controller = removeLoadingController(for: indexPath)
+            controller?.tableView?(tableView, cancelPrefetchingForRowsAt:[indexPath])
+        }
     }
 
     private func cellController(for indexPath: IndexPath) -> CellController {
@@ -78,9 +75,10 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
         return controller
     }
 
-    private func cancelCellControllerLoad(for indexPath: IndexPath) {
-        loadingControllers[indexPath]?.cancelLoad()
+    private func removeLoadingController(for indexPath: IndexPath) -> CellController? {
+        let controller = loadingControllers[indexPath]
         loadingControllers[indexPath] = nil
+        return controller
     }
 
     // MARK: - FeedErrorView
