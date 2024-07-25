@@ -49,6 +49,12 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
         return ds.tableView(tableView, cellForRowAt: indexPath)
     }
 
+    public override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard tableModel.count > indexPath.row else { return }
+        let dl = removeLoadingController(for: indexPath)?.delegate
+        dl?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
+    }
+
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard tableModel.count > indexPath.row else { return }
         let dl = removeLoadingController(for: indexPath)?.delegate
