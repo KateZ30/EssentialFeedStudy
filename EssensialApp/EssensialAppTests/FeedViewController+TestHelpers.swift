@@ -64,6 +64,10 @@ extension ListViewController {
         return errorView.message
     }
 
+    func simulateTapOnErrorView() {
+        errorView.simulateTap()
+    }
+
     func renderedFeedImageData(at index: Int) -> Data? {
         return simulateFeedImageViewVisible(at: index)?.renderedImage
     }

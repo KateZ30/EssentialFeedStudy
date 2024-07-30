@@ -30,9 +30,8 @@ extension XCTestCase {
         }
 
         if snapshotData != storedSnapshotData {
-            let temporarySnapshotURL = URL(fileURLWithPath: "\(file)")
-                .deletingPathExtension()
-                .appendingPathComponent("snapshots")
+            let temporarySnapshotURL = snapshotURL
+                .deletingLastPathComponent()
                 .appendingPathComponent("\(name)-temp.png")
             try? snapshotData?.write(to: temporarySnapshotURL)
             return XCTFail("New snapshot does not match stored snapshot. See difference at new snapshot: \(temporarySnapshotURL) versus the stored snapshot: \(snapshotURL)", file: file, line: line)
