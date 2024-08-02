@@ -19,7 +19,7 @@ struct SnapshotConfiguration {
     let layoutMargins: UIEdgeInsets
     let traitCollection: UITraitCollection
 
-    static func iPhone8(style: UIUserInterfaceStyle) -> SnapshotConfiguration {
+    static func iPhone8(style: UIUserInterfaceStyle, contentSize: UIContentSizeCategory = .medium) -> SnapshotConfiguration {
         SnapshotConfiguration(
             size: CGSize(width: 375, height: 667),
             safeAreaInsets: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0),
@@ -31,7 +31,7 @@ struct SnapshotConfiguration {
                 mutableTraits.horizontalSizeClass = .compact
                 mutableTraits.verticalSizeClass = .regular
                 mutableTraits.layoutDirection = .leftToRight
-                mutableTraits.preferredContentSizeCategory = .medium
+                mutableTraits.preferredContentSizeCategory = contentSize
                 mutableTraits.userInterfaceStyle = style
                 mutableTraits.displayGamut = .P3
             }))
