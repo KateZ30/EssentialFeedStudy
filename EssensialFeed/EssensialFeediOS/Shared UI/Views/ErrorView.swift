@@ -28,11 +28,8 @@ public final class ErrorView: UIButton {
     private var titleAttributes: AttributeContainer {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = NSTextAlignment.center
-
-        var attributes = AttributeContainer()
-        attributes.paragraphStyle = paragraphStyle
-        attributes.font = UIFont.preferredFont(forTextStyle: .body)
-        return attributes
+        return AttributeContainer([.paragraphStyle: paragraphStyle,
+                                   .font: UIFont.preferredFont(forTextStyle: .body)])
     }
 
     public override init(frame: CGRect) {
@@ -42,10 +39,6 @@ public final class ErrorView: UIButton {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-    }
-
-    public override func awakeFromNib() {
-        hideMessage()
     }
 
     private func configure() {
