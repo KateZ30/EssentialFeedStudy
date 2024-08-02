@@ -112,6 +112,9 @@
 		D1F85FD72C5053F900E2C81E /* ImageComments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D1F85FD62C5053F900E2C81E /* ImageComments.storyboard */; };
 		D1F85FD92C50544500E2C81E /* ImageCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85FD82C50544500E2C81E /* ImageCommentCell.swift */; };
 		D1F85FE02C52FE3300E2C81E /* CellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F85FDF2C52FE3300E2C81E /* CellController.swift */; };
+		D1F85FE22C5D9BFE00E2C81E /* LIST_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = D1F85FE12C5D9BFE00E2C81E /* LIST_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge.png */; };
+		D1F85FEB2C5D9D3D00E2C81E /* COMMENTS_WITH_CONTENT_light_extraExtraExtraLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = D1F85FEA2C5D9D3D00E2C81E /* COMMENTS_WITH_CONTENT_light_extraExtraExtraLarge.png */; };
+		D1F85FED2C5D9DDC00E2C81E /* FEED_WITH_CONTENT_light_extraExtraExtraLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = D1F85FEC2C5D9DDC00E2C81E /* FEED_WITH_CONTENT_light_extraExtraExtraLarge.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -282,6 +285,9 @@
 		D1F85FDA2C50584100E2C81E /* COMMENTS_WITH_CONTENT_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = COMMENTS_WITH_CONTENT_dark.png; sourceTree = "<group>"; };
 		D1F85FDB2C50584100E2C81E /* COMMENTS_WITH_CONTENT_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = COMMENTS_WITH_CONTENT_light.png; sourceTree = "<group>"; };
 		D1F85FDF2C52FE3300E2C81E /* CellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellController.swift; sourceTree = "<group>"; };
+		D1F85FE12C5D9BFE00E2C81E /* LIST_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LIST_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge.png; sourceTree = "<group>"; };
+		D1F85FEA2C5D9D3D00E2C81E /* COMMENTS_WITH_CONTENT_light_extraExtraExtraLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = COMMENTS_WITH_CONTENT_light_extraExtraExtraLarge.png; sourceTree = "<group>"; };
+		D1F85FEC2C5D9DDC00E2C81E /* FEED_WITH_CONTENT_light_extraExtraExtraLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FEED_WITH_CONTENT_light_extraExtraExtraLarge.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -784,6 +790,7 @@
 		D1F85FB42C504D5700E2C81E /* snapshots */ = {
 			isa = PBXGroup;
 			children = (
+				D1F85FE12C5D9BFE00E2C81E /* LIST_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge.png */,
 				D1F85FBE2C504DA400E2C81E /* LIST_WITH_ERROR_MESSAGE_dark.png */,
 				D1F85FBF2C504DA400E2C81E /* LIST_WITH_ERROR_MESSAGE_light.png */,
 				D1F85FB62C504D8000E2C81E /* EMPTY_LIST_dark.png */,
@@ -795,6 +802,7 @@
 		D1F85FC42C504DA400E2C81E /* snapshots */ = {
 			isa = PBXGroup;
 			children = (
+				D1F85FEC2C5D9DDC00E2C81E /* FEED_WITH_CONTENT_light_extraExtraExtraLarge.png */,
 				D1F85FBB2C504DA400E2C81E /* FEED_WITH_CONTENT_dark.png */,
 				D1F85FBC2C504DA400E2C81E /* FEED_WITH_CONTENT_light.png */,
 				D1F85FC12C504DA400E2C81E /* FEED_WITH_FAILED_IMAGE_LOADING_dark.png */,
@@ -841,6 +849,7 @@
 		D1F85FDC2C50584100E2C81E /* snapshots */ = {
 			isa = PBXGroup;
 			children = (
+				D1F85FEA2C5D9D3D00E2C81E /* COMMENTS_WITH_CONTENT_light_extraExtraExtraLarge.png */,
 				D1F85FDA2C50584100E2C81E /* COMMENTS_WITH_CONTENT_dark.png */,
 				D1F85FDB2C50584100E2C81E /* COMMENTS_WITH_CONTENT_light.png */,
 			);
@@ -1082,6 +1091,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1F85FE22C5D9BFE00E2C81E /* LIST_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge.png in Resources */,
+				D1F85FEB2C5D9D3D00E2C81E /* COMMENTS_WITH_CONTENT_light_extraExtraExtraLarge.png in Resources */,
+				D1F85FED2C5D9DDC00E2C81E /* FEED_WITH_CONTENT_light_extraExtraExtraLarge.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
