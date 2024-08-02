@@ -11,7 +11,7 @@ public final class ErrorView: UIButton {
     public var onHide: (() -> Void)?
 
     public var message: String? {
-        get { return isVisible ? title(for: .normal) : nil }
+        get { return isVisible ? configuration?.title : nil }
         set {
             if let msg = newValue {
                 show(message: msg)
