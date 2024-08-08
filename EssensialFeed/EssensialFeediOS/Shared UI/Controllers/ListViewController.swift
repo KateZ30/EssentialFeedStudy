@@ -11,18 +11,23 @@ import EssensialFeed
 final public class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView , ResourceErrorView {
     public var onRefresh: (() -> Void)?
 
-    private var loadingControllers = [IndexPath: CellController]()
-
-    private var tableModel: [CellController] = [] {
-        didSet {
-            tableView.reloadData()
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
+        UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, controller in
+            controller.dataSource.tableView(tableView, cellForRowAt: indexPath)
         }
-    }
+    }()
 
     private(set) public var errorView = ErrorView()
 
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableView.dataSource = dataSource
+    }
+
     public override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
+
         configureErrorView()
         refresh()
     }
@@ -59,55 +64,42 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     }
 
     public func display(_ cellControllers: [CellController]) {
-        loadingControllers = [:]
-        tableModel = cellControllers
-    }
-
-    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableModel.count
-    }
-
-    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let ds = cellController(for: indexPath).dataSource
-        return ds.tableView(tableView, cellForRowAt: indexPath)
+        var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(cellControllers, toSection: 0)
+        if #available(iOS 15.0, *) {
+          dataSource.applySnapshotUsingReloadData(snapshot)
+        } else {
+          dataSource.apply(snapshot)
+        }
     }
 
     public override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard tableModel.count > indexPath.row else { return }
-        let dl = removeLoadingController(for: indexPath)?.delegate
+        let dl = cellController(at: indexPath)?.delegate
         dl?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
 
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard tableModel.count > indexPath.row else { return }
-        let dl = removeLoadingController(for: indexPath)?.delegate
+        let dl = cellController(at: indexPath)?.delegate
         dl?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
 
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let dsp = cellController(for: indexPath).dataSourcePrefetching
+            let dsp = cellController(at: indexPath)?.dataSourcePrefetching
             dsp?.tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }
 
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let dsp = removeLoadingController(for: indexPath)?.dataSourcePrefetching
+            let dsp = cellController(at: indexPath)?.dataSourcePrefetching
             dsp?.tableView?(tableView, cancelPrefetchingForRowsAt:[indexPath])
         }
     }
 
-    private func cellController(for indexPath: IndexPath) -> CellController {
-        let controller = tableModel[indexPath.row]
-        loadingControllers[indexPath] = controller
-        return controller
-    }
-
-    private func removeLoadingController(for indexPath: IndexPath) -> CellController? {
-        let controller = loadingControllers[indexPath]
-        loadingControllers[indexPath] = nil
-        return controller
+    private func cellController(at indexPath: IndexPath) -> CellController? {
+        dataSource.itemIdentifier(for: indexPath)
     }
 
     // MARK: - FeedErrorView

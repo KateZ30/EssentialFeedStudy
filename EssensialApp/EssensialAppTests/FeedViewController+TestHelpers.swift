@@ -57,7 +57,8 @@ extension ListViewController {
     }
 
     var numberOfRenderedFeedImageViews: Int {
-        return tableView.numberOfRows(inSection: feedImagesSection)
+        tableView.numberOfSections == 0 ? 0 :
+            tableView.numberOfRows(inSection: feedImagesSection)
     }
 
     var errorMessage: String? {
