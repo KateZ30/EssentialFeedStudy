@@ -12,7 +12,7 @@ import EssensialFeediOS
 import EssensialApp
 import Combine
 
-final class FeedUIIntegrationTests: XCTestCase {
+class FeedUIIntegrationTests: XCTestCase {
     func test_feedView_hasTitle() {
         let (sut, _) = makeSUT()
 
@@ -443,8 +443,8 @@ final class FeedUIIntegrationTests: XCTestCase {
     }
 }
 
-private extension UIView {
-    func enforceLayoutCycle() {
+extension UIView {
+    public func enforceLayoutCycle() {
         layoutIfNeeded()
         RunLoop.current.run(until: Date())
     }
