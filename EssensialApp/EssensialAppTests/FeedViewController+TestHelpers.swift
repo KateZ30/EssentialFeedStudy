@@ -19,7 +19,7 @@ extension ListViewController {
         endAppearanceTransition()
     }
 
-    func simulateUserInitiatedFeedReload() {
+    func simulateUserInitiatedReload() {
         refreshControl?.simulatePullToRefresh()
     }
 
