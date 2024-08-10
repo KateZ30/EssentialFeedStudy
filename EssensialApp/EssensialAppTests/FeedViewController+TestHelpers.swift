@@ -23,6 +23,42 @@ extension ListViewController {
         refreshControl?.simulatePullToRefresh()
     }
 
+    var isShowingLoadingIndicator: Bool {
+        return refreshControl?.isRefreshing == true
+    }
+
+    var errorMessage: String? {
+        return errorView.message
+    }
+
+    func simulateTapOnErrorView() {
+        errorView.simulateTap()
+    }
+
+    private func prepareForFirstAppearance() {
+        setSmallFrameToPreventRenderingCells()
+        replaceRefreshControlWithSpyForiOS17Support()
+    }
+
+    private func setSmallFrameToPreventRenderingCells() {
+        tableView.frame = CGRect(x: 0, y: 0, width: 390, height: 1)
+    }
+
+    private func replaceRefreshControlWithSpyForiOS17Support() {
+        let spyRefreshControl = UIRefreshControlSpy()
+
+        refreshControl?.allTargets.forEach { target in
+            refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
+                spyRefreshControl.addTarget(target, action: Selector(action), for: .valueChanged)
+            }
+        }
+
+        refreshControl = spyRefreshControl
+    }
+}
+
+// Feed specific helpers
+extension ListViewController {
     @discardableResult
     func simulateFeedImageViewVisible(at index: Int) -> FeedImageCell? {
         return feedImageView(at: index) as? FeedImageCell
@@ -52,21 +88,9 @@ extension ListViewController {
         ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
 
-    var isShowingLoadingIndicator: Bool {
-        return refreshControl?.isRefreshing == true
-    }
-
     var numberOfRenderedFeedImageViews: Int {
         tableView.numberOfSections == 0 ? 0 :
             tableView.numberOfRows(inSection: feedImagesSection)
-    }
-
-    var errorMessage: String? {
-        return errorView.message
-    }
-
-    func simulateTapOnErrorView() {
-        errorView.simulateTap()
     }
 
     func renderedFeedImageData(at index: Int) -> Data? {
@@ -82,28 +106,39 @@ extension ListViewController {
         return ds?.tableView(tableView, cellForRowAt: index)
     }
 
-    private func prepareForFirstAppearance() {
-        setSmallFrameToPreventRenderingCells()
-        replaceRefreshControlWithSpyForiOS17Support()
-    }
-
-    private func setSmallFrameToPreventRenderingCells() {
-        tableView.frame = CGRect(x: 0, y: 0, width: 390, height: 1)
-    }
-
-    private func replaceRefreshControlWithSpyForiOS17Support() {
-        let spyRefreshControl = UIRefreshControlSpy()
-
-        refreshControl?.allTargets.forEach { target in
-            refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
-                spyRefreshControl.addTarget(target, action: Selector(action), for: .valueChanged)
-            }
-        }
-
-        refreshControl = spyRefreshControl
-    }
-
     private var feedImagesSection: Int { 0 }
+}
+
+// Comments specific helpers
+extension ListViewController {
+    var numberOfRenderedComments: Int {
+        tableView.numberOfSections == 0 ? 0 :
+            tableView.numberOfRows(inSection: commentsSection)
+    }
+
+    func commentView(at row: Int) -> UITableViewCell? {
+        guard numberOfRenderedComments > row else {
+            return nil
+        }
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: commentsSection)
+        return ds?.tableView(tableView, cellForRowAt: index)
+    }
+
+    private func commentCell(at row: Int) -> ImageCommentCell? {
+        commentView(at: row) as? ImageCommentCell
+    }
+
+
+    func commentMessage(at row: Int) -> String? {
+        return commentCell(at: row)?.messageLabel.text
+    }
+
+    func commentUsername(at row: Int) -> String? {
+        return commentCell(at: row)?.usernameLabel?.text
+    }
+
+    private var commentsSection: Int { 0 }
 }
 
 private class UIRefreshControlSpy: UIRefreshControl {
