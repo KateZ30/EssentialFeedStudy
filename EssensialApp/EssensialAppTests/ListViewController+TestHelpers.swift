@@ -56,9 +56,17 @@ extension ListViewController {
         refreshControl = spyRefreshControl
     }
 
+    fileprivate func numberOfRows(in section: Int) -> Int {
+        tableView.numberOfSections > section ? tableView.numberOfRows(inSection: section) : 0
+    }
+
     fileprivate func cell(row: Int, section: Int) -> UITableViewCell? {
+        guard numberOfRows(in: section) > row else {
+            return nil
+        }
+        let ds = tableView.dataSource
         let index = IndexPath(row: row, section: section)
-        return tableView.dataSource?.tableView(tableView, cellForRowAt: index)
+        return ds?.tableView(tableView, cellForRowAt: index)
     }
 }
 
@@ -112,9 +120,6 @@ extension ListViewController {
     }
 
     func feedImageView(at row: Int) -> UITableViewCell? {
-        guard numberOfRenderedFeedImageViews > row else {
-            return nil
-        }
         return cell(row: row, section: feedImagesSection)
     }
 

@@ -27,6 +27,18 @@ public extension HTTPClient {
 
 // MARK: - Paginated composition
 public extension Paginated {
+    init(items: [Item], loadMorePublisher: (() -> AnyPublisher<Paginated, Error>)?) {
+        self.init(items: items, loadMore: loadMorePublisher.map { publisher in
+            return { completion in
+                publisher().subscribe(Subscribers.Sink(receiveCompletion: { result in
+                    if case let .failure(error) = result {
+                        completion(.failure(error))
+                    }
+                }, receiveValue: { completion(.success($0)) }))
+            }
+        })
+    }
+
     var loadMorePublisher: (() -> AnyPublisher<Paginated, Error>)? {
         guard let loadMore else { return nil }
         return {
