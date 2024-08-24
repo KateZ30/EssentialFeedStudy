@@ -15,7 +15,7 @@ public class LoadMoreCell: UITableViewCell {
         NSLayoutConstraint.activate([
             indicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             indicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            contentView.heightAnchor.constraint(lessThanOrEqualToConstant: 40)
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40)
         ])
         return indicator
     }()

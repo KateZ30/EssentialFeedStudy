@@ -55,6 +55,11 @@ extension ListViewController {
 
         refreshControl = spyRefreshControl
     }
+
+    fileprivate func cell(row: Int, section: Int) -> UITableViewCell? {
+        let index = IndexPath(row: row, section: section)
+        return tableView.dataSource?.tableView(tableView, cellForRowAt: index)
+    }
 }
 
 // Feed specific helpers
@@ -88,6 +93,15 @@ extension ListViewController {
         ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
 
+    func simulateLoadMoreFeedAction() {
+        guard let view = cell(row: 0, section: feedLoadMoreSection) else {
+            return
+        }
+        let delegate = tableView.delegate
+        let index = IndexPath(row: 0, section: feedLoadMoreSection)
+        delegate?.tableView?(tableView, willDisplay: view, forRowAt: index)
+    }
+
     var numberOfRenderedFeedImageViews: Int {
         tableView.numberOfSections == 0 ? 0 :
             tableView.numberOfRows(inSection: feedImagesSection)
@@ -101,12 +115,11 @@ extension ListViewController {
         guard numberOfRenderedFeedImageViews > row else {
             return nil
         }
-        let ds = tableView.dataSource
-        let index = IndexPath(row: row, section: feedImagesSection)
-        return ds?.tableView(tableView, cellForRowAt: index)
+        return cell(row: row, section: feedImagesSection)
     }
 
     private var feedImagesSection: Int { 0 }
+    private var feedLoadMoreSection: Int { 1 }
 
     func simulateTapOnFeedImageView(at row: Int) {
         let delegate = tableView.delegate
@@ -126,9 +139,8 @@ extension ListViewController {
         guard numberOfRenderedComments > row else {
             return nil
         }
-        let ds = tableView.dataSource
-        let index = IndexPath(row: row, section: commentsSection)
-        return ds?.tableView(tableView, cellForRowAt: index)
+
+        return cell(row: row, section: commentsSection)
     }
 
     private func commentCell(at row: Int) -> ImageCommentCell? {
