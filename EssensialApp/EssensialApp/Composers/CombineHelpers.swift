@@ -25,6 +25,18 @@ public extension HTTPClient {
     }
 }
 
+// MARK: - Paginated composition
+public extension Paginated {
+    var loadMorePublisher: (() -> AnyPublisher<Paginated, Error>)? {
+        guard let loadMore else { return nil }
+        return {
+            Deferred {
+                Future(loadMore)
+            }.eraseToAnyPublisher()
+        }
+    }
+}
+
 // MARK: - FeedLoader composition
 public extension LocalFeedLoader {
     typealias Publisher = AnyPublisher<[FeedImage], Error>
