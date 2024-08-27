@@ -125,6 +125,10 @@ extension ListViewController {
     // Load more specific
     private var feedLoadMoreSection: Int { 1 }
 
+    var canLoadMore: Bool {
+        loadMoreFeedCell() != nil
+    }
+
     var loadMoreFeedErrorMessage: String? {
         loadMoreFeedCell()?.message
     }
