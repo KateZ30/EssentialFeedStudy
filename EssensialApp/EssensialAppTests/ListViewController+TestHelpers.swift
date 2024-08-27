@@ -72,6 +72,8 @@ extension ListViewController {
 
 // Feed specific helpers
 extension ListViewController {
+    private var feedImagesSection: Int { 0 }
+
     @discardableResult
     func simulateFeedImageViewVisible(at index: Int) -> FeedImageCell? {
         return feedImageView(at: index) as? FeedImageCell
@@ -101,18 +103,9 @@ extension ListViewController {
         ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
 
-    func simulateLoadMoreFeedAction() {
-        guard let view = cell(row: 0, section: feedLoadMoreSection) else {
-            return
-        }
-        let delegate = tableView.delegate
-        let index = IndexPath(row: 0, section: feedLoadMoreSection)
-        delegate?.tableView?(tableView, willDisplay: view, forRowAt: index)
-    }
-
     var numberOfRenderedFeedImageViews: Int {
         tableView.numberOfSections == 0 ? 0 :
-            tableView.numberOfRows(inSection: feedImagesSection)
+        tableView.numberOfRows(inSection: feedImagesSection)
     }
 
     func renderedFeedImageData(at index: Int) -> Data? {
@@ -123,13 +116,27 @@ extension ListViewController {
         return cell(row: row, section: feedImagesSection)
     }
 
-    private var feedImagesSection: Int { 0 }
-    private var feedLoadMoreSection: Int { 1 }
-
     func simulateTapOnFeedImageView(at row: Int) {
         let delegate = tableView.delegate
         let index = IndexPath(row: row, section: feedImagesSection)
         delegate?.tableView?(tableView, didSelectRowAt: index)
+    }
+
+    // Load more specific
+    private var feedLoadMoreSection: Int { 1 }
+
+    var isShowingLoadingMoreIndicator: Bool {
+        let view = cell(row: 0, section: feedLoadMoreSection) as? LoadMoreCell
+        return view?.isLoading == true
+    }
+
+    func simulateLoadMoreFeedAction() {
+        guard let view = cell(row: 0, section: feedLoadMoreSection) else {
+            return
+        }
+        let delegate = tableView.delegate
+        let index = IndexPath(row: 0, section: feedLoadMoreSection)
+        delegate?.tableView?(tableView, willDisplay: view, forRowAt: index)
     }
 }
 
