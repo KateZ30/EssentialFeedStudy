@@ -37,7 +37,7 @@ public class ImageCommentMapper {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
 
-        guard response.isOK,
+        guard response.isOK2xx,
               let root = try? decoder.decode(Root.self, from: data) else {
             throw Error.invalidData
         }
@@ -45,10 +45,4 @@ public class ImageCommentMapper {
         return root.comments
     }
 
-}
-
-private extension HTTPURLResponse {
-    var isOK: Bool {
-        (200...299).contains(statusCode)
-    }
 }
