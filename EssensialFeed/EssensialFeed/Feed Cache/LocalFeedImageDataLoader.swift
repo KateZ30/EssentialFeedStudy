@@ -8,26 +8,6 @@
 import Foundation
 
 public class LocalFeedImageDataLoader: FeedImageDataLoader {
-    private final class Task: FeedImageDataLoaderTask {
-        private var completion: ((FeedImageDataLoader.Result) -> Void)?
-
-        init(_ completion: @escaping (FeedImageDataLoader.Result) -> Void) {
-            self.completion = completion
-        }
-
-        func complete(with result: FeedImageDataLoader.Result) {
-            completion?(result)
-        }
-
-        func cancel() {
-            preventFurtherCompletions()
-        }
-
-        private func preventFurtherCompletions() {
-            self.completion = nil
-        }
-    }
-
     private var store: FeedImageDataStore
 
     public enum Error: Swift.Error {
@@ -39,18 +19,16 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader {
         self.store = store
     }
 
-    public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
-        let task = Task(completion)
-
-        task.complete(
-            with: Swift.Result {
-                try store.retrieve(dataForURL: url)
+    public func loadImageData(from url: URL) throws -> Data {
+        do {
+            if let data = try store.retrieve(dataForURL: url) {
+                return data
             }
-            .mapError { _ in Error.failed }
-            .flatMap { data in
-                data.map { .success($0) } ?? .failure(Error.notFound)
-            })
-        return task
+        } catch {
+            throw Error.failed
+        }
+
+        throw Error.notFound
     }
 }
 
