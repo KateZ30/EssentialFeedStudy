@@ -47,28 +47,6 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteWith: found(lastData), for: url)
     }
 
-    func test_sideEffects_runSerially() throws {
-        let sut = try makeSUT()
-        let url = anyURL()
-
-        let op1 = expectation(description: "Wait for 1st operation")
-        sut.insert([localImage(url: url)], timestamp: Date()) { _ in
-            op1.fulfill()
-        }
-
-        let op2 = expectation(description: "Wait for 3nd operation")
-        sut.insert(anyData(), for: url) { _ in
-            op2.fulfill()
-        }
-
-        let op3 = expectation(description: "Wait for 3rd operation")
-        sut.insert(anyData(), for: url) { _ in
-            op3.fulfill()
-        }
-
-        wait(for: [op1, op2, op3], timeout: 5.0, enforceOrder: true)
-    }
-
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) throws -> CoreDataFeedStore {
         let sut = try CoreDataFeedStore(storeURL: inMemoryStoreURL())
@@ -97,37 +75,31 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         let exp = expectation(description: "Wait for cache insertion")
 
         store.insert([localImage(url: url)], timestamp: Date()) { result in
-            switch result {
-                case let .failure(error):
-                    XCTFail("Expected image to be inserted successfully, got error: \(error)", file: file, line: line)
-                exp.fulfill()
-                case .success:
-                store.insert(data, for: url) { insertionResult in
-                    if case let .failure(error) = insertionResult {
-                        XCTFail("Expected to insert data successfully, got error: \(error)", file: file, line: line)
-                    }
-                    exp.fulfill()
-                }
+            if case let .failure(error) = result {
+                XCTFail("Expected image to be inserted successfully, got error: \(error)", file: file, line: line)
             }
-        }
-        wait(for: [exp], timeout: 1.0)
-    }
 
-    private func expect(_ sut: CoreDataFeedStore, toCompleteWith expectedResult: FeedImageDataStore.RetrieveResult, for url: URL, file: StaticString = #file, line: UInt = #line) {
-        let exp = expectation(description: "Wait for retrieve completion")
-        sut.retrieve(dataForURL: url) { receivedResult in
-            switch (receivedResult, expectedResult) {
-            case let (.success(receivedData), .success(expectedData)):
-                XCTAssertEqual(receivedData, expectedData, file: file, line: line)
-            case (.failure, .failure):
-                break
-            default:
-                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
-            }
             exp.fulfill()
         }
 
         wait(for: [exp], timeout: 1.0)
+        do {
+            try store.insert(data, for: url)
+        } catch {
+            XCTFail("Expected to insert data successfully, got error: \(error)", file: file, line: line)
+        }
+    }
+
+    private func expect(_ sut: CoreDataFeedStore, toCompleteWith expectedResult: FeedImageDataStore.RetrieveResult, for url: URL, file: StaticString = #file, line: UInt = #line) {
+        let receivedResult = Result { try sut.retrieve(dataForURL: url) }
+        switch (receivedResult, expectedResult) {
+        case let (.success(receivedData), .success(expectedData)):
+            XCTAssertEqual(receivedData, expectedData, file: file, line: line)
+        case (.failure, .failure):
+            break
+        default:
+            XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+        }
     }
 
 }
