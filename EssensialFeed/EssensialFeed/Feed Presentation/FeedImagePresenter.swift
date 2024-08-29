@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import EssensialFeed
 
 public final class FeedImagePresenter {
     public static func map(_ image: FeedImage) -> FeedImageViewModel {
