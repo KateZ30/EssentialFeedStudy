@@ -59,11 +59,11 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
             .appendingPathComponent("\(type(of: self)).store")
     }
 
-    private func notFound() -> FeedImageDataStore.RetrieveResult {
+    private func notFound() -> Result<Data?, Error> {
         .success(.none)
     }
 
-    private func found(_ data: Data) -> FeedImageDataStore.RetrieveResult {
+    private func found(_ data: Data) -> Result<Data?, Error> {
         .success(data)
     }
 
@@ -90,7 +90,7 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         }
     }
 
-    private func expect(_ sut: CoreDataFeedStore, toCompleteWith expectedResult: FeedImageDataStore.RetrieveResult, for url: URL, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: CoreDataFeedStore, toCompleteWith expectedResult: Result<Data?, Error>, for url: URL, file: StaticString = #file, line: UInt = #line) {
         let receivedResult = Result { try sut.retrieve(dataForURL: url) }
         switch (receivedResult, expectedResult) {
         case let (.success(receivedData), .success(expectedData)):
