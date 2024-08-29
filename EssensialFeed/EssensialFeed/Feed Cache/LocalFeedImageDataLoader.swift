@@ -41,15 +41,15 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader {
 
     public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
         let task = Task(completion)
-        store.retrieve(dataForURL: url) { [weak self] result in
-            guard self != nil else { return }
-            task.complete(with: result
-                .mapError { _ in Error.failed }
-                .flatMap { data in
-                    data.map { .success($0) } ?? .failure(Error.notFound)
-                }
-            )
-        }
+
+        task.complete(
+            with: Swift.Result {
+                try store.retrieve(dataForURL: url)
+            }
+            .mapError { _ in Error.failed }
+            .flatMap { data in
+                data.map { .success($0) } ?? .failure(Error.notFound)
+            })
         return task
     }
 }
