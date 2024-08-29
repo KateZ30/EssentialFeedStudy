@@ -55,11 +55,11 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader {
 }
 
 extension LocalFeedImageDataLoader: FeedImageDataCache {
-    public typealias SaveResult = FeedImageDataCache.Result
-
-    public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
-        completion(SaveResult {
+    public func save(_ data: Data, for url: URL) throws {
+        do {
             try store.insert(data, for: url)
-        }.mapError{ _ in Error.failed })
+        } catch {
+            throw Error.failed
+        }
     }
 }
