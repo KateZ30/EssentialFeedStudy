@@ -9,13 +9,22 @@ public final class CoreDataFeedStore {
     public static let model = NSManagedObjectModel(name: modelName, in: Bundle(for: CoreDataFeedStore.self))
 
     private let container: NSPersistentContainer
-    private let context: NSManagedObjectContext
+    let context: NSManagedObjectContext
 
     public struct ModelNotFound: Error {
         public let modelName: String
     }
 
-    public init(storeURL: URL) throws {
+    public enum ContextQueueType {
+        case main
+        case background
+    }
+
+    public var contextQueueType: ContextQueueType {
+        context == container.viewContext ? .main : .background
+    }
+
+    public init(storeURL: URL, contextQueueType: ContextQueueType = .background) throws {
         guard let model = CoreDataFeedStore.model else {
             throw ModelNotFound(modelName: CoreDataFeedStore.modelName)
         }
@@ -25,7 +34,7 @@ public final class CoreDataFeedStore {
             model: model,
             url: storeURL
         )
-        context = container.newBackgroundContext()
+        context = contextQueueType == .background ? container.newBackgroundContext() : container.viewContext
     }
 
     deinit {
@@ -39,7 +48,7 @@ public final class CoreDataFeedStore {
         }
     }
 
-    func perform(_ action: @escaping (NSManagedObjectContext) -> Void) {
-        context.perform { [context] in action(context) }
+    public func perform(_ action: @escaping () -> Void) {
+        context.perform(action)
     }
 }

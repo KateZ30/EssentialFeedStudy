@@ -14,32 +14,32 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
         case insert(data: Data, for: URL)
     }
     private(set) var receivedMessages = [Message]()
-    private var retrieveCompletions = [(FeedImageDataStore.RetrieveResult) -> Void]()
-    private var insertCompletions = [(FeedImageDataStore.InsertResult) -> Void]()
+    private var retrieveResult: Result<Data?, Error>?
+    private var insertResult: Result<Void, Error>?
 
-    func insert(_ data: Data, for url: URL, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
+    func insert(_ data: Data, for url: URL) throws {
         receivedMessages.append(.insert(data: data, for: url))
-        insertCompletions.append(completion)
+        try insertResult?.get()
     }
 
-    func retrieve(dataForURL url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult) -> Void) {
+    func retrieve(dataForURL url: URL) throws -> Data? {
         receivedMessages.append(.retrieve(from: url))
-        retrieveCompletions.append(completion)
+        return try retrieveResult?.get()
     }
 
     func complete(with error: Error, at index: Int = 0) {
-        retrieveCompletions[index](.failure(error))
+        retrieveResult = .failure(error)
     }
 
     func complete(with data: Data?, at index: Int = 0) {
-        retrieveCompletions[index](.success(data))
+        retrieveResult = .success(data)
     }
 
     func completeInsertion(with error: Error, at index: Int = 0) {
-        insertCompletions[index](.failure(error))
+        insertResult = .failure(error)
     }
 
     func completeInsertionSuccessfully(at index: Int = 0) {
-        insertCompletions[index](.success(()))
+        insertResult = .success(())
     }
 }

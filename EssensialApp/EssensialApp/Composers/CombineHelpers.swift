@@ -9,13 +9,55 @@ import Foundation
 import Combine
 import EssensialFeed
 
+// MARK: - HTTPClient composition
+public extension HTTPClient {
+    typealias Publisher = AnyPublisher<(Data, HTTPURLResponse), Error>
+
+    func getPublisher(from url: URL) -> Publisher {
+        var task: HTTPClientTask?
+        return Deferred {
+            Future { completion in
+                task = self.get(from: url, completion: completion)
+            }
+            .handleEvents(receiveCancel: { task?.cancel() })
+        }
+        .eraseToAnyPublisher()
+    }
+}
+
+// MARK: - Paginated composition
+public extension Paginated {
+    init(items: [Item], loadMorePublisher: (() -> AnyPublisher<Paginated, Error>)?) {
+        self.init(items: items, loadMore: loadMorePublisher.map { publisher in
+            return { completion in
+                publisher().subscribe(Subscribers.Sink(receiveCompletion: { result in
+                    if case let .failure(error) = result {
+                        completion(.failure(error))
+                    }
+                }, receiveValue: { completion(.success($0)) }))
+            }
+        })
+    }
+
+    var loadMorePublisher: (() -> AnyPublisher<Paginated, Error>)? {
+        guard let loadMore else { return nil }
+        return {
+            Deferred {
+                Future(loadMore)
+            }.eraseToAnyPublisher()
+        }
+    }
+}
+
 // MARK: - FeedLoader composition
-public extension FeedLoader {
+public extension LocalFeedLoader {
     typealias Publisher = AnyPublisher<[FeedImage], Error>
 
     func loadPublisher() -> Publisher {
         Deferred {
-            Future(self.load)
+            Future { completion in
+                completion(Result { try self.load() })
+            }
         }
         .eraseToAnyPublisher()
     }
@@ -23,12 +65,21 @@ public extension FeedLoader {
 
 private extension FeedCache {
     func saveIgnoringResult(_ feed: [FeedImage]) {
-        save(feed) { _ in }
+        try? save(feed)
+    }
+
+    func saveIgnoringResult(_ page: Paginated<FeedImage>) {
+        saveIgnoringResult(page.items)
     }
 }
 
-extension Publisher where Output == [FeedImage] {
-    func caching(to cache: FeedCache) -> AnyPublisher<Output, Failure> {
+extension Publisher {
+    func caching(to cache: FeedCache) -> AnyPublisher<Output, Failure> where Output == [FeedImage] {
+        handleEvents(receiveOutput: cache.saveIgnoringResult)
+            .eraseToAnyPublisher()
+    }
+
+    func caching(to cache: FeedCache) -> AnyPublisher<Output, Failure> where Output == Paginated<FeedImage> {
         handleEvents(receiveOutput: cache.saveIgnoringResult)
             .eraseToAnyPublisher()
     }
@@ -39,20 +90,18 @@ public extension FeedImageDataLoader {
     typealias Publisher = AnyPublisher<Data, Error>
 
     func loadImageDataPublisher(from url: URL) -> Publisher {
-        var task: FeedImageDataLoaderTask?
         return Deferred {
             Future { completion in
-                task = self.loadImageData(from: url, completion: completion)
+                completion(Result { try self.loadImageData(from: url) })
             }
         }
-        .handleEvents(receiveCancel: { task?.cancel() })
         .eraseToAnyPublisher()
     }
 }
 
 private extension FeedImageDataCache {
     func saveIgnoringResult(_ data: Data, for url: URL) {
-        save(data, for: url) { _ in }
+        try? save(data, for: url)
     }
 }
 
@@ -110,5 +159,88 @@ extension DispatchQueue {
         func schedule(after date: DispatchQueue.SchedulerTimeType, interval: DispatchQueue.SchedulerTimeType.Stride, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) -> any Cancellable {
             DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
         }
+    }
+}
+
+typealias AnyDispatchQueueScheduler = AnyScheduler<DispatchQueue.SchedulerTimeType, DispatchQueue.SchedulerOptions>
+
+extension AnyDispatchQueueScheduler {
+    static var immediateWhenOnMainQueue: Self {
+        DispatchQueue.immediateWhenOnMainQueue.eraseToAnyScheduler()
+    }
+
+    static func scheduler(for store: CoreDataFeedStore) -> AnyDispatchQueueScheduler {
+        CoreDataFeedStoreScheduler(store: store).eraseToAnyScheduler()
+    }
+
+    private struct CoreDataFeedStoreScheduler: Scheduler {
+        let store: CoreDataFeedStore
+        var now: DispatchQueue.SchedulerTimeType { .init(.now()) }
+        var minimumTolerance: DispatchQueue.SchedulerTimeType.Stride { .zero }
+
+        func schedule(options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
+            if store.contextQueueType == .main, Thread.isMainThread {
+                action()
+            } else {
+                store.perform(action)
+            }
+        }
+
+        func schedule(after date: DispatchQueue.SchedulerTimeType, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
+            if store.contextQueueType == .main, Thread.isMainThread {
+                action()
+            } else {
+                store.perform(action)
+            }
+        }
+
+        func schedule(after date: DispatchQueue.SchedulerTimeType, interval: DispatchQueue.SchedulerTimeType.Stride, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) -> Cancellable {
+            if store.contextQueueType == .main, Thread.isMainThread {
+                action()
+            } else {
+                store.perform(action)
+            }
+
+            return AnyCancellable {}
+        }
+    }
+}
+
+extension Scheduler {
+    func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> {
+        AnyScheduler(self)
+    }
+}
+
+struct AnyScheduler<SchedulerTimeType: Strideable, SchedulerOptions>: Scheduler
+where SchedulerTimeType.Stride : SchedulerTimeIntervalConvertible {
+
+    private let _now: () -> SchedulerTimeType
+    private let _minimumTolerance: () -> SchedulerTimeType.Stride
+    private let _schedule: (SchedulerOptions?, @escaping () -> Void) -> Void
+    private let _scheduleAfter: (SchedulerTimeType, SchedulerTimeType.Stride, SchedulerOptions?, @escaping () -> Void) -> Void
+    private let _scheduleAfterInterval: (SchedulerTimeType, SchedulerTimeType.Stride, SchedulerTimeType.Stride, SchedulerOptions?, @escaping () -> Void) -> Cancellable
+
+    init<S>(_ scheduler: S) where S: Scheduler, S.SchedulerTimeType == SchedulerTimeType, S.SchedulerOptions == SchedulerOptions {
+        self._now = { scheduler.now }
+        self._minimumTolerance = { scheduler.minimumTolerance }
+        self._schedule = scheduler.schedule(options:_:)
+        self._scheduleAfter = scheduler.schedule(after:tolerance:options:_:)
+        self._scheduleAfterInterval = scheduler.schedule(after:interval:tolerance:options:_:)
+    }
+
+    var now: SchedulerTimeType { _now() }
+    var minimumTolerance: SchedulerTimeType.Stride { _minimumTolerance() }
+
+    func schedule(options: SchedulerOptions?, _ action: @escaping () -> Void) {
+        _schedule(options, action)
+    }
+
+    func schedule(after date: SchedulerTimeType, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, _ action: @escaping () -> Void) {
+        _scheduleAfter(date, tolerance, options, action)
+    }
+
+    func schedule(after date: SchedulerTimeType, interval: SchedulerTimeType.Stride, tolerance: SchedulerTimeType.Stride, options: Self.SchedulerOptions?, _ action: @escaping () -> Void) -> any Cancellable {
+        _scheduleAfterInterval(date, interval, tolerance, options, action)
     }
 }

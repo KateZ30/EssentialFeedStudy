@@ -52,7 +52,7 @@ final class EssensialFeedCacheIntegrationTests: XCTestCase {
 
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> LocalFeedLoader {
         let storeURL = testSpecificStoreURL()
-        let store = try! CoreDataFeedStore(storeURL: storeURL)
+        let store = try! CoreDataFeedStore(storeURL: storeURL, contextQueueType: .main)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(store, file: file, line: line)
@@ -80,27 +80,19 @@ final class EssensialFeedCacheIntegrationTests: XCTestCase {
     }
 
     private func expect(_ sut: LocalFeedLoader, toLoad feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
-        let exp = expectation(description: "Wait for load completion")
-        sut.load { result in
-            switch result {
-            case let .success(imageFeed):
-                XCTAssertEqual(imageFeed, feed, file: file, line: line)
-            case let .failure(error):
-                XCTFail("Expected successful feed result, got \(error) instead", file: file, line: line)
-            }
-            exp.fulfill()
+        do {
+            let loadedFeed = try sut.load()
+            XCTAssertEqual(loadedFeed, feed, file: file, line: line)
+        } catch {
+            XCTFail("Expected successful feed result, got \(error) instead", file: file, line: line)
         }
-        wait(for: [exp], timeout: 1.0)
     }
 
     private func save(_ feed: [FeedImage], with sut: LocalFeedLoader, file: StaticString = #filePath, line: UInt = #line) {
-        let saveExp = expectation(description: "Wait for save completion")
-        sut.save(feed) { result in
-            if case let .failure(error) = result {
-                XCTFail("Expected successful save result, got \(error) instead", file: file, line: line)
-            }
-            saveExp.fulfill()
+        do {
+            try sut.save(feed)
+        } catch {
+            XCTFail("Expected successful save result, got \(error) instead", file: file, line: line)
         }
-        wait(for: [saveExp], timeout: 1.0)
     }
 }

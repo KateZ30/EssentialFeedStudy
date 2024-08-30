@@ -13,25 +13,29 @@ import EssensialFeediOS
 public final class FeedUIComposer {
     private init() {}
 
-    public static func feedComposedWith(feedLoader: @escaping () -> FeedLoader.Publisher,
-                                        imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) -> FeedViewController {
-        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: feedLoader )
-        let feedController = FeedViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
+    private typealias FeedPresentationAdapter = LoadResourcePresentationAdapter<Paginated<FeedImage>, FeedViewAdapter>
 
-        presentationAdapter.presenter = FeedPresenter(
-            feedView: FeedViewAdapter(controller: feedController,
-                                      imageLoader: imageLoader),
+    public static func feedComposedWith(feedLoader: @escaping () -> AnyPublisher<Paginated<FeedImage>, Error>,
+                                        imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher,
+                                        selection: @escaping (FeedImage) -> Void = { _ in }) -> ListViewController {
+        let presentationAdapter = FeedPresentationAdapter(loader: feedLoader)
+        let feedController = ListViewController.makeWith(title: FeedPresenter.title)
+        feedController.onRefresh = presentationAdapter.load
+        presentationAdapter.presenter = LoadResourcePresenter(
+            resourceView: FeedViewAdapter(controller: feedController,
+                                          imageLoader: imageLoader,
+                                          selection: selection),
             loadingView: WeakRefVirtualProxy(feedController),
-            errorView: WeakRefVirtualProxy(feedController))
+            errorView: WeakRefVirtualProxy(feedController),
+            mapper: { $0 })
         return feedController
     }
 }
 
-private extension FeedViewController {
-    static func makeWith(delegate: FeedViewControllerDelegate, title: String) -> FeedViewController {
-        let storyboard = UIStoryboard(name: "Feed", bundle: Bundle(for: FeedViewController.self))
-        let feedController = storyboard.instantiateInitialViewController() as! FeedViewController
-        feedController.delegate = delegate
+private extension ListViewController {
+    static func makeWith(title: String) -> ListViewController {
+        let storyboard = UIStoryboard(name: "Feed", bundle: Bundle(for: ListViewController.self))
+        let feedController = storyboard.instantiateInitialViewController() as! ListViewController
         feedController.title = title
         return feedController
     }

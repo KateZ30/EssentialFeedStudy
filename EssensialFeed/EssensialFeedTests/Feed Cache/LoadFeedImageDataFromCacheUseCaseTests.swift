@@ -19,7 +19,7 @@ final class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let (store, sut) = makeSUT()
         let url = anyURL()
 
-        _ = sut.loadImageData(from: url) { _ in }
+        _ = try? sut.loadImageData(from: url)
 
         XCTAssertEqual(store.receivedMessages, [.retrieve(from: url)])
     }
@@ -49,34 +49,6 @@ final class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         }
     }
 
-    func test_loadImageData_doesNotDeliverResultAfterCancellingTask() {
-        let (store, sut) = makeSUT()
-        let foundData = anyData()
-
-        var received = [FeedImageDataLoader.Result]()
-        let task = sut.loadImageData(from: anyURL()) { received.append($0) }
-        task.cancel()
-
-        store.complete(with: foundData)
-        store.complete(with: .none)
-        store.complete(with: anyNSError())
-
-        XCTAssertTrue(received.isEmpty, "Expected no received results after cancelling task")
-    }
-
-    func test_loadImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-        let store = FeedImageDataStoreSpy()
-        var sut: LocalFeedImageDataLoader? = LocalFeedImageDataLoader(store: store)
-
-        var received = [FeedImageDataLoader.Result]()
-        _ = sut?.loadImageData(from: anyURL()) { received.append($0) }
-
-        sut = nil
-        store.complete(with: .none)
-
-        XCTAssertTrue(received.isEmpty, "Expected no received results after instance has been deallocated")
-    }
-
     // MARK: - Helpers
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (store: FeedImageDataStoreSpy, sut: LocalFeedImageDataLoader) {
         let store = FeedImageDataStoreSpy()
@@ -86,32 +58,29 @@ final class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         return (store, sut)
     }
 
-    private func failed() -> FeedImageDataLoader.Result {
+    private func failed() -> Result<Data, Error> {
         return .failure(LocalFeedImageDataLoader.Error.failed)
     }
 
-    private func notFound() -> FeedImageDataLoader.Result {
+    private func notFound() -> Result<Data, Error> {
         return .failure(LocalFeedImageDataLoader.Error.notFound)
     }
 
 
-    private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        let exp = expectation(description: "Wait for load completion")
-
-        _ = sut.loadImageData(from: anyURL()) { receivedResult in
-            switch (receivedResult, expectedResult) {
-            case let (.success(receivedData), .success(expectedData)):
-                XCTAssertEqual(receivedData, expectedData, file: file, line: line)
-            case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
-                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
-            default:
-                XCTFail("Expected \(expectedResult), got \(receivedResult)", file: file, line: line)
-            }
-            exp.fulfill()
-        }
+    private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: Result<Data, Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
 
         action()
 
-        wait(for: [exp], timeout: 1.0)
+        let receivedResult = Result {
+            try sut.loadImageData(from: anyURL())
+        }
+        switch (receivedResult, expectedResult) {
+        case let (.success(receivedData), .success(expectedData)):
+            XCTAssertEqual(receivedData, expectedData, file: file, line: line)
+        case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
+            XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+        default:
+            XCTFail("Expected \(expectedResult), got \(receivedResult)", file: file, line: line)
+        }
     }
 }
