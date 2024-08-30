@@ -15,7 +15,12 @@ public final class CoreDataFeedStore {
         public let modelName: String
     }
 
-    public init(storeURL: URL) throws {
+    public enum ContextQueueType {
+        case main
+        case background
+    }
+
+    public init(storeURL: URL, contextQueueType: ContextQueueType = .background) throws {
         guard let model = CoreDataFeedStore.model else {
             throw ModelNotFound(modelName: CoreDataFeedStore.modelName)
         }
@@ -25,7 +30,7 @@ public final class CoreDataFeedStore {
             model: model,
             url: storeURL
         )
-        context = container.newBackgroundContext()
+        context = contextQueueType == .background ? container.newBackgroundContext() : container.viewContext
     }
 
     deinit {
@@ -42,7 +47,7 @@ public final class CoreDataFeedStore {
     func performSync<R>(_ action: (NSManagedObjectContext) -> Result<R, Error>) throws -> R {
         let context = self.context
         var result: Result<R, Error>!
-        context.performAndWait { result = action(context) }
+        result = action(context)
         return try result.get()
     }
 
