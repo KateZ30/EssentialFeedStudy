@@ -19,7 +19,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let deletionError = anyNSError()
 
         store.completeDeletion(with: deletionError)
-        sut.save(uniqueImageFeed().models) { _ in }
+        try? sut.save(uniqueImageFeed().models)
 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
@@ -30,7 +30,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let feed = uniqueImageFeed()
 
         store.completeDeletionSuccessfully()
-        sut.save(feed.models) { _ in }
+        try? sut.save(feed.models)
 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(feed.local, timestamp)])
     }
@@ -39,7 +39,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let (store, sut) = makeSUT()
         let deletionError = anyNSError()
 
-        expect(sut, toCompleteWithResult: .failure(deletionError)) {
+        expect(sut, toCompleteWithError: deletionError) {
             store.completeDeletion(with: deletionError)
         }
     }
@@ -48,7 +48,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let (store, sut) = makeSUT()
         let insertionError = anyNSError()
 
-        expect(sut, toCompleteWithResult: .failure(insertionError)) {
+        expect(sut, toCompleteWithError: insertionError) {
             store.completeDeletionSuccessfully()
             store.completeInsertion(with: insertionError)
         }
@@ -57,7 +57,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
     func test_save_succeedOnInsertionSuccess() {
         let (store, sut) = makeSUT()
 
-        expect(sut, toCompleteWithResult: .success(())) {
+        expect(sut, toCompleteWithError: nil) {
             store.completeDeletionSuccessfully()
             store.completeInsertionSuccessfully()
         }
@@ -73,24 +73,15 @@ final class CacheFeedUseCaseTests: XCTestCase {
     }
 
     private func expect(_ sut: LocalFeedLoader,
-                        toCompleteWithResult expectedResult: LocalFeedLoader.SaveResult,
+                        toCompleteWithError expectedError: NSError?,
                         when action: () -> Void,
                         file: StaticString = #filePath, line: UInt = #line) {
-        let exp = expectation(description: "Wait for save completion")
         action()
 
-        sut.save(uniqueImageFeed().models) { result in
-            switch (result, expectedResult) {
-            case (.success, .success):
-                break
-            case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
-                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
-            default:
-                XCTFail("Expected \(expectedResult), got \(result) instead", file: file, line: line)
-            }
-
-            exp.fulfill()
+        do {
+            try sut.save(uniqueImageFeed().models)
+        } catch {
+            XCTAssertEqual(error as NSError?, expectedError, file: file, line: line)
         }
-        wait(for: [exp], timeout: 1.0)
     }
 }
