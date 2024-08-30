@@ -72,18 +72,8 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
     }
 
     private func insert(_ data: Data, for url: URL, into store: CoreDataFeedStore, file: StaticString = #file, line: UInt = #line) {
-        let exp = expectation(description: "Wait for cache insertion")
-
-        store.insert([localImage(url: url)], timestamp: Date()) { result in
-            if case let .failure(error) = result {
-                XCTFail("Expected image to be inserted successfully, got error: \(error)", file: file, line: line)
-            }
-
-            exp.fulfill()
-        }
-
-        wait(for: [exp], timeout: 1.0)
         do {
+            try store.insert([localImage(url: url)], timestamp: Date())
             try store.insert(data, for: url)
         } catch {
             XCTFail("Expected to insert data successfully, got error: \(error)", file: file, line: line)

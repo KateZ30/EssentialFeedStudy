@@ -81,78 +81,41 @@ extension FeedStoreSpecs where Self: XCTestCase {
         expect(sut, toRetrieve: .success(nil), file: file, line: line)
     }
 
-    func assertThatSideEffectsRunSerially(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
-        var completedOperationsInOrder = [XCTestExpectation]()
-
-        let op1 = expectation(description: "Operation 1")
-        sut.insert(uniqueImageFeed().local, timestamp: Date()) { _ in
-            completedOperationsInOrder.append(op1)
-            op1.fulfill()
-        }
-
-        let op2 = expectation(description: "Operation 2")
-        sut.deleteCachedFeed { _ in
-            completedOperationsInOrder.append(op2)
-            op2.fulfill()
-        }
-
-        let op3 = expectation(description: "Operation 3")
-        sut.insert(uniqueImageFeed().local, timestamp: Date()) { _ in
-            completedOperationsInOrder.append(op3)
-            op3.fulfill()
-        }
-
-        waitForExpectations(timeout: 5.0)
-
-        XCTAssertEqual(completedOperationsInOrder, [op1, op2, op3], "Expected side-effects to run serially but operations finished in the wrong order")
-    }
-
     @discardableResult
     func insert(_ cache: (feed: [LocalFeedImage], timestamp: Date), to sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) -> Error? {
-        let exp = expectation(description: "Wait for insert")
-        var insertionError: Error?
-        sut.insert(cache.feed, timestamp: cache.timestamp) { insertResult in
-            if case let .failure(error) = insertResult {
-                insertionError = error
-            }
-            exp.fulfill()
+        do {
+            try sut.insert(cache.feed, timestamp: cache.timestamp)
+        } catch {
+            return error
         }
-        wait(for: [exp], timeout: 1.0)
-        return insertionError
+
+        return nil
     }
 
     @discardableResult
     func deleteCache(from sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) -> Error? {
-        let exp = expectation(description: "Wait for delete")
-        var deletionError: Error?
-        sut.deleteCachedFeed { deletionResult in
-            if case let .failure(error) = deletionResult {
-                deletionError = error
-            }
-            exp.fulfill()
+        do {
+            try sut.deleteCachedFeed()
+        } catch {
+            return error
         }
-        wait(for: [exp], timeout: 1.0)
-        return deletionError
+
+        return nil
     }
 
     func expect(_ sut: FeedStore, toRetrieve expectedResult: FeedStore.RetrivalResult, file: StaticString = #filePath, line: UInt = #line) {
-        let exp = expectation(description: "Wait for retrieval")
+        let retrievedResult = Result { try sut.retrieve() }
 
-        sut.retrieve { retrievedResult in
-            switch (retrievedResult, expectedResult) {
-            case (.success(nil), .success(nil)),
-                     (.failure, .failure):
-                    break
-            case let (.success(.some(expectedCache)), .success(.some(retrivedCache))):
-                XCTAssertEqual(expectedCache.feed, retrivedCache.feed)
-                XCTAssertEqual(expectedCache.timestamp, retrivedCache.timestamp)
-            default:
-                XCTFail("Expected to retrieve \(expectedResult), got \(retrievedResult) instead", file: file, line: line)
-            }
-            exp.fulfill()
+        switch (retrievedResult, expectedResult) {
+        case (.success(nil), .success(nil)),
+                 (.failure, .failure):
+                break
+        case let (.success(.some(expectedCache)), .success(.some(retrivedCache))):
+            XCTAssertEqual(expectedCache.feed, retrivedCache.feed)
+            XCTAssertEqual(expectedCache.timestamp, retrivedCache.timestamp)
+        default:
+            XCTFail("Expected to retrieve \(expectedResult), got \(retrievedResult) instead", file: file, line: line)
         }
-
-        wait(for: [exp], timeout: 1.0)
     }
 
     func expect(_ sut: FeedStore, toRetrieveTwice expectedResult: FeedStore.RetrivalResult, file: StaticString = #filePath, line: UInt = #line) {
