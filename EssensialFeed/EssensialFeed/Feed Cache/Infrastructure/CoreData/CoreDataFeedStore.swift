@@ -45,4 +45,8 @@ public final class CoreDataFeedStore {
         context.performAndWait { result = action(context) }
         return try result.get()
     }
+
+    public func perform(_ action: @escaping () -> Void) {
+        context.perform(action)
+    }
 }
