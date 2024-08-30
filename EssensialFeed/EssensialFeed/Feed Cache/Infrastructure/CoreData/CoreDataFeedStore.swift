@@ -20,6 +20,10 @@ public final class CoreDataFeedStore {
         case background
     }
 
+    public var contextQueueType: ContextQueueType {
+        context == container.viewContext ? .main : .background
+    }
+
     public init(storeURL: URL, contextQueueType: ContextQueueType = .background) throws {
         guard let model = CoreDataFeedStore.model else {
             throw ModelNotFound(modelName: CoreDataFeedStore.modelName)

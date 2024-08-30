@@ -14,18 +14,27 @@ import Combine
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
-    private lazy var scheduler: AnyDispatchQueueScheduler = DispatchQueue(
-        label: "com.katez.essensialapp.infra.queue",
-        qos: .userInitiated,
-        attributes: .concurrent)
+    private lazy var scheduler: AnyDispatchQueueScheduler  = {
+        if let store = store as? CoreDataFeedStore {
+            return .scheduler(for: store)
+        }
+
+        return DispatchQueue(
+            label: "com.katez.essensialapp.infra.queue",
+            qos: .userInitiated,
+            attributes: .concurrent)
         .eraseToAnyScheduler()
+    }()
 
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
 
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(storeURL: NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite"))
+        if let coreDataStore = try? CoreDataFeedStore(storeURL: NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")) {
+            return coreDataStore
+        }
+        return InMemoryFeedStore.empty
     }()
 
     private lazy var localFeedLoader: LocalFeedLoader = {
@@ -40,11 +49,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             imageLoader: makeLocalImageDataLoaderWithRemoteFallback,
             selection: showComments))
 
-    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore, scheduler: AnyDispatchQueueScheduler) {
+    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()
         self.httpClient = httpClient
         self.store = store
-        self.scheduler = scheduler
     }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
